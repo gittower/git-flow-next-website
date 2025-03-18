@@ -1,0 +1,19 @@
+---
+const { icon, heading, paragraph } = Astro.props;
+---
+
+<div class="feature-item">
+  <div class="feature-icon">
+    <img src={icon.src} alt="" aria-hidden="true" />
+  </div>
+  <div class="feature-content">
+    <h3>{heading}</h3>
+    <p>{paragraph}</p>
+  </div>
+</div>
+
+<style>
+  h3 {
+    padding: 1.5rem 0;
+  }
+</style>

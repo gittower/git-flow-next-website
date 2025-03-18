@@ -1,0 +1,42 @@
+---
+import logo from '../assets/logo.svg';
+---
+
+<header>
+  <nav class="container">
+    <div class="menu-items">
+      <a href="#">
+        <img src={logo.src} width="178" height="32" alt="git-flow-next logo" />
+      </a>
+      <div>
+        <ul class="menu">
+          <li><a href="#">Docs</a></li>
+          <li><a href="#" target="_blank" rel="noreferrer noopener">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+</header>
+
+<style>
+  header {
+    padding: 1.125rem 0;
+    border-bottom: 1px solid #4635B14D;
+  }
+  .menu-items {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .menu {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    gap: 3rem;
+    line-height: 1.875rem;
+    a {
+      color: var(--main-white);
+    }
+  }
+</style>

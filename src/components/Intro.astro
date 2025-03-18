@@ -1,0 +1,39 @@
+---
+import icon from '../assets/icon.svg';
+---
+
+<section class="container">
+  <div class="two-columns">
+    <div>
+      <h2>What is git-flow-next?</h2>
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+    </div>
+    <div class="icon">
+      <img src={icon.src} width="457" height="280" alt="git-flow-next icon" />
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    margin-top: 5rem;
+    @media (min-width: 768px) {
+      margin-top: 12.5rem;
+    }
+  }
+  .two-columns {
+    display: grid;
+    gap: 5rem;
+    align-items: center;
+    grid-template-columns: 1fr;
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr auto;
+    }
+  }
+  .icon {
+    order: -1;
+    @media (min-width: 768px) {
+      order: 0;
+    }
+  }
+</style>

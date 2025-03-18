@@ -1,0 +1,55 @@
+---
+import FeatureItem from '../components/FeatureItem.astro';
+import feature1 from '../assets/feature1.svg';
+import feature2 from '../assets/feature2.svg';
+import feature3 from '../assets/feature3.svg';
+import feature4 from '../assets/feature4.svg';
+---
+
+<section class="container">
+  <h2 class="text-center">Features</h2>
+  <div class="four-columns">
+    <FeatureItem
+      icon={feature1}
+      heading="Feature 1"
+      paragraph="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+    />
+    <FeatureItem
+      icon={feature2}
+      heading="Feature 2"
+      paragraph="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+    />
+    <FeatureItem
+      icon={feature3}
+      heading="Feature 3"
+      paragraph="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+    />
+    <FeatureItem
+      icon={feature4}
+      heading="Feature 4"
+      paragraph="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+    />
+  </div>
+  <div class="more-info text-center">
+    <p><a href="#">For more information, check the docs.</a></p>
+  </div>
+</section>
+
+<style>
+  section {
+    margin-top: 5rem;
+    @media (min-width: 768px) {
+      margin-top: 12.5rem;
+    }
+  }
+  .four-columns {
+    margin-top: 4rem;
+    margin-bottom: 3.5rem;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+</style>

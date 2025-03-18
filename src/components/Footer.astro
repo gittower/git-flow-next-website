@@ -1,0 +1,40 @@
+---
+import logo from '../assets/tower-logo.svg';
+---
+
+<footer>
+  <div class="container two-columns">
+    <div>
+      <h3>Support</h3>
+      <p>Contribute to our project on <a href="#" target="_blank" rel="noreferrer noopener">GitHub!</a></p>
+    </div>
+    <div>
+      <a href="https://www.git-tower.com/" target="_blank" rel="noreferrer noopener">
+        <img src={logo.src} width="127" height="34" alt="Tower logo" />
+      </a>
+      <p>git-flow-next was brought to you by your friends at <a href="https://www.git-tower.com/" target="_blank" rel="noreferrer noopener">Tower</a>.</p>
+</footer>
+
+<style>
+footer {
+  margin-top: 5rem;
+  @media (min-width: 768px) {
+    margin-top: 12.5rem;
+  }
+  padding-top: 5.5rem;
+  padding-bottom: 3.5rem;
+  border-top: 1px solid #1E164D;
+}
+h3, img {
+  margin-bottom: 1rem;
+}
+.two-columns {
+  display: grid;
+  gap: 5rem;
+  align-items: center;
+  grid-template-columns: 1fr;
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr auto;
+  }
+}
+</style>
