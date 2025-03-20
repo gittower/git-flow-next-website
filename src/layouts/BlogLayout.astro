@@ -3,11 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import PostNavigation from '../components/PostNavigation.astro';
 
-const { title, pubDate, author, headings, nextPost, prevPost } = Astro.props;
+const { title, pubDate, author, description, headings, nextPost, prevPost } = Astro.props;
 
 ---
 
-<Layout>
+<Layout title={title} description={description}>
   <section>
 
     <aside>

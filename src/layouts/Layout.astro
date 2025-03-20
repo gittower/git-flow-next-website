@@ -3,6 +3,12 @@ import HeaderNav from '../components/HeaderNav.astro';
 import Footer from '../components/Footer.astro';
 
 import '@fontsource/inria-sans';
+
+const { title, description } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const canonicalURL = Astro.url;
+
 ---
 
 <!doctype html>
@@ -12,7 +18,23 @@ import '@fontsource/inria-sans';
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>git-flow-next: Your Favorite Git Workflow. Reimagined.</title>
+		<!-- SEO Meta Tags -->
+		<title>{currentPath === "/" ? title : `${title} | git-flow-next`}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+
 	</head>
 	<body>
 	  <HeaderNav/>
