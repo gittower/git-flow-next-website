@@ -1,16 +1,19 @@
 ---
 import logo from '../assets/logo.svg';
+
+const currentPath = Astro.url.pathname;
 ---
 
 <header>
   <nav class="container">
     <div class="menu-items">
-      <a href="#">
+      <a href="/" class="logo">
         <img src={logo.src} width="178" height="32" alt="git-flow-next logo" />
       </a>
       <div>
         <ul class="menu">
-          <li><a href="#">Docs</a></li>
+          <li><a href="/docs" class={currentPath.startsWith('/docs') ? 'active' : ''}>Docs</a></li>
+          <li><a href="/blog" class={currentPath.startsWith('/blog') ? 'active' : ''}>Blog</a></li>
           <li><a href="#" target="_blank" rel="noreferrer noopener">GitHub</a></li>
         </ul>
       </div>
@@ -22,9 +25,6 @@ import logo from '../assets/logo.svg';
     padding: 1.125rem 0;
     border-bottom: 1px solid #4635B14D;
   }
-  a:hover {
-    border: none;
-  }
   .menu-items {
     width: 100%;
     display: flex;
@@ -32,14 +32,23 @@ import logo from '../assets/logo.svg';
     justify-content: space-between;
     align-items: center;
   }
+  a.logo:hover {
+    border: none;
+  }
   .menu {
     display: flex;
     flex-direction: row;
     list-style-type: none;
     gap: 3rem;
     line-height: 1.875rem;
+    li {
+      padding-left: 0;
+    }
     a {
       color: var(--main-white);
+    }
+    .active {
+      border-bottom: 2px solid var(--main-purple);
     }
   }
 </style>

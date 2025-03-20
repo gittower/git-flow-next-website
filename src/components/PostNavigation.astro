@@ -1,0 +1,68 @@
+---
+export interface PostPreview {
+  slug: string;
+  data: {
+    title: string;
+  };
+}
+
+interface Props {
+  prevPost: PostPreview | null;
+  nextPost: PostPreview | null;
+}
+
+const { prevPost, nextPost } = Astro.props;
+
+if (!prevPost && !nextPost) return null;
+---
+
+<nav class="post-navigation" aria-label="Post navigation">
+    {prevPost ? (
+    <a href={`/blog/posts/${prevPost.slug}`} rel="prev">
+      <div class="nav-card">
+        <div class="nav-direction">← Previous Post</div>
+        <div class="post-title">{prevPost.data.title}</div>
+      </div>
+    </a>
+    ) : (
+      <div class="nav-item empty"></div>
+    )}
+
+    {nextPost ? (
+      <a href={`/blog/posts/${nextPost.slug}`} rel="next">
+        <div class="nav-card">
+          <div class="nav-direction">Next Post →</div>
+          <div class="post-title">{nextPost.data.title}</div>
+        </div>
+      </a>
+    ) : (
+      <div class="nav-item empty"></div>
+    )}
+</nav>
+
+<style>
+  nav {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  a {
+    border: none;
+  }
+  .nav-card {
+    padding: 1.5rem;
+    background: var(--light-purple);
+    border-radius: 16px;
+    cursor: pointer;
+    border: 2px solid var(--light-purple);
+    transition: .3s ease-in-out;
+    &:hover {
+      border: 2px solid var(--main-purple);
+    }
+  }
+  .nav-direction {
+    color: var(--main-white);
+    padding-bottom: .5rem;
+  }
+
+</style>

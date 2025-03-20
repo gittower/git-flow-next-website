@@ -1,0 +1,110 @@
+---
+// TableOfContents.astro - Server-side TOC generation
+const { headings } = Astro.props;
+---
+
+{headings && headings.length > 0 ? (
+  <div class="table-of-contents">
+    <h3>Table of Contents</h3>
+    <ul id="toc-list">
+      {headings.map(heading => (
+        <li data-heading-id={heading.slug}>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+) : null}
+
+<script>
+  // Minimal client-side script just for scroll highlighting
+  document.addEventListener('DOMContentLoaded', () => {
+    const tocItems = document.querySelectorAll('#toc-list li');
+    const headingElements = Array.from(document.querySelectorAll('.blog-post h2[id]'));
+
+    if (tocItems.length === 0 || headingElements.length === 0) return;
+
+    // Simple active heading tracking
+    function updateActiveHeading() {
+      const scrollPosition = window.scrollY + 100; // Small offset
+
+      let activeHeading = headingElements[0];
+
+      // Find current heading
+      for (const heading of headingElements) {
+        if (heading.offsetTop <= scrollPosition) {
+          activeHeading = heading;
+        } else {
+          break;
+        }
+      }
+
+      // Remove active class from all items
+      tocItems.forEach(item => item.classList.remove('active'));
+
+      // Add active class to current item
+      const activeItem = document.querySelector(`[data-heading-id="${activeHeading.id}"]`);
+      if (activeItem) activeItem.classList.add('active');
+    }
+
+    // Update on scroll
+    window.addEventListener('scroll', updateActiveHeading);
+
+    // Initial update
+    updateActiveHeading();
+  });
+</script>
+
+<style>
+  .table-of-contents {
+    padding-top: 1rem;
+    position: sticky;
+    top: 2rem;
+    height: max-content;
+
+    h3 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      line-height: 150%;
+      padding-bottom: 1rem;
+      padding-left: 1rem;
+    }
+
+    ul {
+      padding-left: 0;
+    }
+    li {
+      list-style-type: none;
+      margin-left: 0;
+      padding: .5rem 0;
+      margin-bottom: .5rem;
+      font-size: 0.875rem;
+      padding-left: 1rem;
+
+      a {
+        color: rgba(239, 238, 255, 0.5);
+        &:hover {
+          color: rgba(239, 238, 255, 1);
+        }
+      }
+    }
+
+    .active {
+      background: var(--light-purple);
+      border-radius: 12px;
+      height: 2.25rem;
+      display: flex;
+      align-items: center;
+      a {
+        font-weight: 700;
+        color: var(--main-white);
+        border: 2px solid transparent;
+        &:hover {
+          border: 2px solid transparent;
+        }
+      }
+    }
+  }
+
+
+</style>
