@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+const publishedDocs = await getCollection('docs', ({ data }) => {
+  return !data.draft;
+});
+
+// Sort by order if available
+const sortedDocs = publishedDocs.sort((a, b) => {
+  return (a.data.order || 999) - (b.data.order || 999);
+});
+---
+
+<Layout title="git-flow-next Documentation" description="">
+  <section class="docs-container">
+    <h1>Documentation</h1>
+    <div class="docs-intro">Learn how to get the most out of git-flow-next by reading our documentation.</div>
+    <ul class="docs-archive">
+      {sortedDocs.map(doc => (
+        <li>
+          <a href={`/docs/${doc.slug}`}>{doc.data.title}</a>
+          <p class="doc-description">{doc.data.description}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Layout>
+
+<style>
+  section {
+    padding-top: 3.5rem;
+    padding-bottom: 6.5rem;
+  }
+  h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+  .docs-intro {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    padding-bottom: 3rem;
+  }
+  .docs-archive {
+    a {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: .5rem;
+    }
+    .doc-description {
+      margin-bottom: 2rem;
+    }
+  }
+
+</style>

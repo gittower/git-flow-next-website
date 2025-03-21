@@ -18,9 +18,9 @@ if (!prevPost && !nextPost) return null;
 
 <nav class="post-navigation" aria-label="Post navigation">
     {prevPost ? (
-    <a href={`/blog/posts/${prevPost.slug}`} rel="prev">
+    <a href={`${prevPost.slug}`} rel="prev">
       <div class="nav-card">
-        <div class="nav-direction">← Previous Post</div>
+        <div class="nav-direction">← Previous</div>
         <div class="post-title">{prevPost.data.title}</div>
       </div>
     </a>
@@ -29,9 +29,9 @@ if (!prevPost && !nextPost) return null;
     )}
 
     {nextPost ? (
-      <a href={`/blog/posts/${nextPost.slug}`} rel="next">
+      <a href={`${nextPost.slug}`} rel="next">
         <div class="nav-card">
-          <div class="nav-direction">Next Post →</div>
+          <div class="nav-direction">Next →</div>
           <div class="post-title">{nextPost.data.title}</div>
         </div>
       </a>

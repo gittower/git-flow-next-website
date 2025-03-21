@@ -1,0 +1,102 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import PostNavigation from '../components/PostNavigation.astro';
+
+const { title, description, headings, nextDoc, prevDoc } = Astro.props;
+
+---
+
+<Layout title={title} description={description}>
+  <section>
+
+    <aside>
+      <TableOfContents headings={headings} />
+    </aside>
+
+    <article>
+      <h1>{title}</h1>
+
+      <div class="blog-post">
+        <slot />
+      </div>
+
+      <PostNavigation
+        prevPost={prevDoc}
+        nextPost={nextDoc}
+      />
+
+    </article>
+
+  </section>
+</Layout>
+
+<style>
+  section {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-top: 3.5rem;
+    padding-bottom: 6.5rem;
+  }
+
+  aside {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    section {
+      grid-template-columns: minmax(0, 15rem) 1fr;
+      gap: 6rem;
+    }
+
+    aside {
+      display: block;
+    }
+  }
+
+  article {
+    h1 {
+      font-size: 2.25rem;
+      margin-bottom: 1rem;
+    }
+  }
+  .blog-post-details {
+    margin-bottom: 2rem;;
+  }
+
+  .blog-post {
+    max-width: 65ch;
+
+    h2 {
+      font-size: 1.5rem;
+      margin: 1.5rem 0 1rem;
+      scroll-margin-top: .5rem;
+    }
+
+    p {
+      font-size: 1.125rem;
+      line-height: 150%;
+      margin-bottom: 1rem;
+    }
+
+    img {
+      padding-bottom: 1rem;
+    }
+
+    code {
+      background: var(--light-purple);
+      color: var(--main-green);
+      border-radius: 12px;
+      padding: .5rem;
+    }
+
+    li {
+      font-size: 1.125rem;
+      line-height: 150%;
+      margin-bottom: 1rem;
+    }
+  }
+</style>

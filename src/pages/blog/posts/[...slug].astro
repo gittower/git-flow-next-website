@@ -10,8 +10,15 @@ export async function getStaticPaths() {
   );
 
   return sortedEntries.map((entry, index) => {
-    const nextPost = sortedEntries[index + 1] || null;
-    const prevPost = sortedEntries[index - 1] || null;
+    const nextPost = sortedEntries[index + 1] ? {
+      ...sortedEntries[index + 1],
+      slug: `/blog/posts/${sortedEntries[index + 1].slug}`
+    } : null;
+
+    const prevPost = sortedEntries[index - 1] ? {
+      ...sortedEntries[index - 1],
+      slug: `/blog/posts/${sortedEntries[index - 1].slug}`
+    } : null;
 
     return {
       params: { slug: entry.slug },
