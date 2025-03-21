@@ -53,7 +53,7 @@ const { title, pubDate, author, description, headings, nextPost, prevPost } = As
   @media (min-width: 768px) {
     section {
       grid-template-columns: minmax(0, 15rem) 1fr;
-      gap: 8rem;
+      gap: 6rem;
     }
 
     aside {
@@ -85,7 +85,21 @@ const { title, pubDate, author, description, headings, nextPost, prevPost } = As
       line-height: 150%;
       margin-bottom: 1rem;
     }
+
+    img {
+      padding-bottom: 1rem;
+    }
+
+    code {
+      background: var(--light-purple);
+      color: var(--main-green);
+      border-radius: 12px;
+      padding: .5rem;
+    }
+
     li {
+      font-size: 1.125rem;
+      line-height: 150%;
       margin-bottom: 1rem;
     }
   }
