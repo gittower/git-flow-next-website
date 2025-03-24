@@ -1,7 +1,7 @@
 ---
 title: 'How git-flow-avh Improves Upon git-flow'
 pubDate: 2025-03-20
-description: 'Discover how git-flow-avh improves upon the original git-flow model, offering enhanced flexibility, better release management, and increased configurability for modern development teams.'
+description: 'Learn how git-flow-avh improves upon the original git-flow model, offering more flexibility, better release management, and increased configurability.'
 author: 'Bruno Brito'
 ---
 

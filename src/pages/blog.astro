@@ -6,7 +6,7 @@ const posts = await getCollection('blog');
 posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Layout title="Blog" description="Our thoughts about Git workflows and version control best practices.">
+<Layout title="Blog" description="Our thoughts about modern Git workflows and version control best practices.">
   <section class="blog-container">
     <h1>Blog</h1>
     <div class="blog-intro">In this space, we will post all our thoughts about Git workflows and version control best practices.</div>
