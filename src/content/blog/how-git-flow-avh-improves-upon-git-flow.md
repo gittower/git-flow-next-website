@@ -11,7 +11,7 @@ Git-flow quickly gained popularity among development teams, providing a much-nee
 
 However, as with any tool or methodology, time and experience revealed areas for improvement. Developers began to encounter limitations and inefficiencies in the original git-flow model, particularly in modern, fast-paced development environments.
 
-Enter <a href="https://github.com/petervanderdoes/gitflow-avh" target="_blank" rel="noopener noreferrer">git-flow-avh</a>, an enhanced version of the original git-flow. Created by Peter van der Does, this alternative implementation addresses many of the pain points of the original model while maintaining its core principles. The "AVH" portion of the name comes from "A VirtualHome", since Peter van der Does' blog is hosted at <a href="http://blog.avirtualhome.com" target="_blank" rel="noopener noreferrer">http://blog.avirtualhome.com</a>.
+Enter <a href="https://github.com/petervanderdoes/gitflow-avh" target="_blank" rel="noopener noreferrer">git-flow-avh</a>, an enhanced version of the original git-flow. Created by Peter van der Does, this alternative implementation addresses many of the pain points of the original model while maintaining its core principles. <a href="https://github.com/petervanderdoes/gitflow-avh/issues/242" target="_blank" rel="noopener noreferrer">The "AVH" portion of the name comes from "A VirtualHome"</a>, since Peter van der Does' blog is hosted at <a href="https://blog.avirtualhome.com/" target="_blank" rel="noopener noreferrer">https://blog.avirtualhome.com/</a>.
 
 Git-flow-avh offers improved flexibility, better release management, and enhanced configurability, making it a more suitable choice for today's diverse development needs.
 
