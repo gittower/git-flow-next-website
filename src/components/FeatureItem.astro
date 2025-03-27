@@ -8,7 +8,7 @@ const { icon, heading, paragraph } = Astro.props;
   </div>
   <div class="feature-content">
     <h3>{heading}</h3>
-    <p>{paragraph}</p>
+    <p set:html={paragraph}></p>
   </div>
 </div>
 
