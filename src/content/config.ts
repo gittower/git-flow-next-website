@@ -10,6 +10,17 @@ const blogCollection = defineCollection({
   }),
 });
 
+const docsCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    publishDate: z.date(),
+    description: z.string(),
+    order: z.number().int()
+  }),
+});
+
 export const collections = {
   'blog': blogCollection,
+  'docs': docsCollection,
 };
