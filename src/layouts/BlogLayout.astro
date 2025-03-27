@@ -75,9 +75,13 @@ const { title, pubDate, author, description, headings, nextPost, prevPost } = As
     max-width: 65ch;
 
     h2 {
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       margin: 1.5rem 0 1rem;
       scroll-margin-top: .5rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
     }
 
     p {
@@ -94,13 +98,16 @@ const { title, pubDate, author, description, headings, nextPost, prevPost } = As
       background: var(--light-purple);
       color: var(--main-green);
       border-radius: 12px;
-      padding: .5rem;
+      padding: .25rem;
     }
 
     li {
       font-size: 1.125rem;
       line-height: 150%;
-      margin-bottom: 1rem;
+      margin-bottom: .5rem;
+      &:last-of-type {
+        margin-bottom: 1rem;
+      }
     }
   }
 </style>
