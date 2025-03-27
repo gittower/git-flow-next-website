@@ -6,7 +6,7 @@ import icon from '../assets/icon.svg';
   <div class="two-columns">
     <div>
       <h2>What is git-flow-next?</h2>
-      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+      <p>Built on the original git-flow and gitflow-avh projects (now both discontinued), gitflow-next is the next iteration of advanced Git workflow possibilities, offering enhanced features and greater customization options for modern teams in fast-paced environments.</p>
     </div>
     <div class="icon">
       <img src={icon.src} width="457" height="280" alt="git-flow-next icon" />
@@ -23,12 +23,15 @@ import icon from '../assets/icon.svg';
   }
   .two-columns {
     display: grid;
-    gap: 5rem;
+    gap: 6rem;
     align-items: center;
     grid-template-columns: 1fr;
     @media (min-width: 768px) {
       grid-template-columns: 1fr auto;
     }
+  }
+  p {
+    font-size: 1.125rem;
   }
   .icon {
     order: -1;
