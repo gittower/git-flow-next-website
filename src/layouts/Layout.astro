@@ -130,6 +130,7 @@ const canonicalURL = Astro.url;
     font-weight: 400;
     font-size: 1rem;
     line-height: 150%;
+    margin-bottom: 1rem;
   }
   img {
     max-width: 100%;
@@ -145,6 +146,16 @@ const canonicalURL = Astro.url;
       border-bottom: 2px solid var(--main-purple);
     }
   }
+  pre {
+    background: var(--light-purple);
+    padding: 1rem;
+    overflow-x: none;
+    margin-bottom: 2rem;
+  }
+  .astro-code, .astro-code span {
+    background: var(--light-purple) !important;
+
+  }
   code {
     background: var(--light-purple);
     color: var(--main-green);
@@ -157,4 +168,10 @@ const canonicalURL = Astro.url;
   ul li {
     padding-left: 1rem;
   }
+  hr {
+    height: 1px;
+    width: 200px;
+    margin: 55px auto 50px auto;
+    background: rgba(255,255,255,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
 </style>
