@@ -17,8 +17,10 @@ const { title, pubDate, author, description, headings, nextPost, prevPost } = As
     <article>
       <h1>{title}</h1>
       <div class="blog-post-details">
-        <p>Written by: {author}</p>
-        <p>Published on: {pubDate}</p>
+        <p>
+          <span class="author">Written by: {author}</span>
+          <span class="pub-date">Published on {pubDate}</span>
+        </p>
       </div>
 
       <div class="blog-post">
@@ -64,6 +66,21 @@ const { title, pubDate, author, description, headings, nextPost, prevPost } = As
     h1 {
       font-size: 2.25rem;
       margin-bottom: 1rem;
+    }
+    .author {
+      font-weight: 700;
+      color: var(--main-green);
+      font-size: 0.875rem;
+      &:after {
+        content: "\25CF";
+        margin: 0 0.5rem;
+        color: var(--default-white);
+      }
+    }
+    .pub-date {
+      font-style: italic;
+      font-size: 0.875rem;
+      color: var(--default-white);
     }
   }
   .blog-post-details {

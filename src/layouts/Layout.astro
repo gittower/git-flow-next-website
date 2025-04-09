@@ -85,6 +85,7 @@ const canonicalURL = Astro.url;
   /* End of Reset CSS */
 
   :root {
+    --default-white: #FFFFFF;
     --main-white: #EFEEFF;
     --main-purple: #FF39B9;
     --light-purple: #18123F;
@@ -122,6 +123,9 @@ const canonicalURL = Astro.url;
     font-weight: 700;
     font-size: 1.5rem;
   }
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--default-white);
+  }
   p {
     font-weight: 400;
     font-size: 1rem;
@@ -144,7 +148,7 @@ const canonicalURL = Astro.url;
   code {
     background: var(--light-purple);
     color: var(--main-green);
-    border-radius: 12px;
+    border-radius: 4px;
     padding: .25rem;
   }
   .text-center {
