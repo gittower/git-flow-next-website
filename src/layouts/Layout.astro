@@ -174,4 +174,112 @@ const canonicalURL = Astro.url;
     margin: 55px auto 50px auto;
     background: rgba(255,255,255,0.2);
     border-bottom: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .table-of-contents {
+    padding-top: 1rem;
+    position: sticky;
+    top: 2rem;
+    height: max-content;
+
+    h3 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      line-height: 150%;
+      padding-bottom: 1rem;
+      padding-left: 1rem;
+    }
+
+    ul {
+      padding-left: 0;
+    }
+    li {
+      list-style-type: none;
+      margin-left: 0;
+      padding: .5rem 0;
+      margin-bottom: .5rem;
+      font-size: 0.875rem;
+      padding-left: 1rem;
+
+      a {
+        color: rgba(239, 238, 255, 0.5);
+        &:hover {
+          color: rgba(239, 238, 255, 1);
+        }
+      }
+    }
+
+    .active, li:has(.active) {
+      background: var(--light-purple);
+      border-radius: 12px;
+      height: 2.25rem;
+      display: flex;
+      align-items: center;
+      color: var(--default-white);
+      font-weight: 700;
+      pointer-events: none;
+      a {
+        color: var(--main-white);
+        border: 2px solid transparent;
+      }
+    }
+  }
+
+  article {
+      h1 {
+        font-size: 2.25rem;
+        margin-bottom: 1rem;
+      }
+      .author {
+        font-weight: 700;
+        color: var(--main-green);
+        font-size: 0.875rem;
+        &:after {
+          content: "\25CF";
+          margin: 0 0.5rem;
+          color: var(--default-white);
+        }
+      }
+      .pub-date {
+        font-style: italic;
+        font-size: 0.875rem;
+        color: var(--default-white);
+      }
+    }
+    .blog-post-details {
+      margin-bottom: 2rem;;
+    }
+
+    .blog-post {
+      max-width: 65ch;
+
+      h2 {
+        font-size: 1.75rem;
+        margin: 1.5rem 0 1rem;
+        scroll-margin-top: .5rem;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        font-size: 1.125rem;
+        line-height: 150%;
+        margin-bottom: 1rem;
+      }
+
+      img {
+        padding-bottom: 1rem;
+      }
+
+      li {
+        font-size: 1.125rem;
+        line-height: 150%;
+        margin-bottom: .5rem;
+        &:last-of-type {
+          margin-bottom: 1rem;
+        }
+      }
+    }
 </style>
