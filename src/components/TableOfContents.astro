@@ -1,11 +1,11 @@
 ---
 // TableOfContents.astro - Server-side TOC generation
-const { headings } = Astro.props;
+const { headings, title } = Astro.props;
 ---
 
 {headings && headings.length > 0 ? (
   <div class="table-of-contents">
-    <h3>Table of Contents</h3>
+    <h3>{title}</h3>
     <ul id="toc-list">
       {headings.map(heading => (
         <li data-heading-id={heading.slug}>
