@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+const { title } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const publishedDocs = await getCollection('docs', ({ data }) => {
+  return !data.draft;
+});
+
+const sortedDocs = publishedDocs.sort((a, b) => {
+  return (a.data.order || 999) - (b.data.order || 999);
+});
+---
+
+{sortedDocs && sortedDocs.length > 0 ? (
+  <div class="table-of-contents">
+    <h3>{title}</h3>
+    <ul id="toc-list">
+      {sortedDocs.map(doc => {
+        const isActive = currentPath === `/docs/${doc.slug}`;
+        return (
+          <li data-heading-id={doc.data.title}>
+            <a href={`/docs/${doc.slug}`} class={isActive ? 'active' : ''}>{doc.data.title}</a>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+) : null}

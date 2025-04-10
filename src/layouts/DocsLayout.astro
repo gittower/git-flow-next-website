@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import TableOfContents from '../components/TableOfContents.astro';
+import DocumentList from '../components/DocumentList.astro';
 import PostNavigation from '../components/PostNavigation.astro';
 
 const { title, description, headings, nextDoc, prevDoc } = Astro.props;
@@ -11,7 +12,7 @@ const { title, description, headings, nextDoc, prevDoc } = Astro.props;
   <section>
 
     <aside>
-      <TableOfContents headings={headings} />
+      <DocumentList title="Documentation" />
     </aside>
 
     <article>
@@ -27,6 +28,10 @@ const { title, description, headings, nextDoc, prevDoc } = Astro.props;
       />
 
     </article>
+
+    <aside>
+      <TableOfContents title="On this page" headings={headings} />
+    </aside>
 
   </section>
 </Layout>
@@ -47,8 +52,8 @@ const { title, description, headings, nextDoc, prevDoc } = Astro.props;
 
   @media (min-width: 768px) {
     section {
-      grid-template-columns: minmax(0, 15rem) 1fr;
-      gap: 6rem;
+      grid-template-columns: 12rem 1fr 12rem;
+      gap: 3rem;
     }
 
     aside {
