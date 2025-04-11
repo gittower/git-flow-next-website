@@ -17,7 +17,7 @@ const sortedDocs = publishedDocs.sort((a, b) => {
     <h3>{title}</h3>
     <ul id="toc-list">
       {sortedDocs.map(doc => {
-        const isActive = currentPath === `/docs/${doc.slug}`;
+        const isActive = currentPath === `/docs/${doc.slug}` || currentPath === `/docs/${doc.slug}/`
         return (
           <li data-heading-id={doc.data.title}>
             <a href={`/docs/${doc.slug}`} class={isActive ? 'active' : ''}>{doc.data.title}</a>
