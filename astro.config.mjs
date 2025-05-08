@@ -7,6 +7,6 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
-  site: 'https://git-flow-next.dev',
+  site: 'https://git-flow.sh',
   integrations: [sitemap()],
 });
