@@ -44,6 +44,9 @@ const { title, description, headings, nextDoc, prevDoc } = Astro.props;
     grid-template-columns: 1fr;
     gap: 2rem;
     padding: 3.5rem 1rem 6.5rem;
+    @media (max-width: 767px) {
+      display: block;
+    }
   }
 
   aside {

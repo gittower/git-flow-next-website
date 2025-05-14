@@ -28,7 +28,7 @@ import icon from '../assets/icon.svg';
     align-items: center;
     grid-template-columns: 1fr;
     @media (min-width: 768px) {
-      grid-template-columns: 1fr auto;
+      grid-template-columns: 1fr 1fr;
     }
   }
   p {
@@ -36,6 +36,7 @@ import icon from '../assets/icon.svg';
   }
   .icon {
     order: -1;
+    justify-self: end;
     @media (min-width: 768px) {
       order: 0;
     }

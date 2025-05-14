@@ -43,6 +43,11 @@ posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
   time {
     margin-left: .5rem;
     color: rgba(239, 238, 255, 0.5);
+    @media (max-width: 767px) {
+      margin-left: 0;
+      display: block;
+      margin-bottom: 2rem;
+    }
   }
   .blog-archive {
     a {

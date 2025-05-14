@@ -41,9 +41,17 @@ const currentPath = Astro.url.pathname;
     align-items: center;
     list-style-type: none;
     gap: 2.5rem;
+    @media (max-width: 767px) {
+      gap: 1.25rem;
+    }
     line-height: 1.875rem;
     li {
       padding-left: 0;
+      &:last-child {
+        @media (max-width: 767px) {
+          display: none;
+        }
+      }
     }
     a {
       color: var(--main-white);

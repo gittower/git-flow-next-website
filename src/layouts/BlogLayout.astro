@@ -45,6 +45,9 @@ const { title, pubDate, author, description, headings, nextPost, prevPost } = As
     grid-template-columns: 1fr;
     gap: 2rem;
     padding: 3.5rem 1rem 6.5rem;
+    @media (max-width: 767px) {
+      display: block;
+    }
   }
 
   aside {
@@ -54,11 +57,17 @@ const { title, pubDate, author, description, headings, nextPost, prevPost } = As
   @media (min-width: 768px) {
     section {
       grid-template-columns: minmax(0, 15rem) 1fr;
-      gap: 6rem;
+      gap: 2.5rem;
     }
 
     aside {
       display: block;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    section {
+      gap: 6rem;
     }
   }
 </style>
