@@ -5,13 +5,13 @@ description: 'How separate merges into "main" and "develop" can lead to history 
 author: 'Bruno Brito'
 ---
 
-Following our previous discussion on how git-flow-avh improves upon the original git-flow model, let's dive a little deeper into the limitations of the classic approach. 
+Following our previous discussion on how git-flow-avh improves upon the original git-flow model, let's dive a little deeper into the limitations of the classic approach.
 
-We've already touched on [the benefits of git-flow-avh, particularly its streamlined merging strategy](how-git-flow-avh-improves-upon-git-flow). Today, we'll focus on the pitfalls of the original git-flow model, mainly in **how it addresses separate merges into `main` and `develop`.**
+We've already touched on [the benefits of git-flow-avh, particularly its streamlined merging strategy](https://git-flow.sh/blog/posts/how-git-flow-avh-improves-upon-git-flow). Today, we'll focus on the pitfalls of the original git-flow model, mainly in **how it addresses separate merges into `main` and `develop`.**
 
-If you are a git-flow adopter, you are already well aware that this branching workflow requires merging release branches into both `main` (for production) and `develop` (for ongoing development). 
+If you are a git-flow adopter, you are already well aware that this branching workflow requires merging release branches into both `main` (for production) and `develop` (for ongoing development).
 
-While this seemed logical at the time, it introduces several downsides that modern development teams can't accept. 
+While this seemed logical at the time, it introduces several downsides that modern development teams can't accept.
 
 Let's take a closer look at the main issues at stake.
 
@@ -22,7 +22,7 @@ One of the most immediate drawbacks is the fragmentation of your Git history, wh
 - determine when bugs were introduced.
 - understand how the project has progressed.
 
-Why? Because with the classic git-flow approach, instead of a clean, linear history, you end up with parallel paths that diverge and converge. This makes it harder to understand the project's evolution at a glance. 
+Why? Because with the classic git-flow approach, instead of a clean, linear history, you end up with parallel paths that diverge and converge. This makes it harder to understand the project's evolution at a glance.
 
 The commit graph becomes a tangled web, making it difficult to trace the origins of specific changes. When the commit graph resembles a plate of spaghetti, visualizing the flow of changes becomes a nightmare.
 
@@ -32,7 +32,7 @@ The `git bisect` command, which is usually quite useful for identifying bugs, be
 
 Determining which changes were part of a specific release can also become a headache. Trying to reconstruct the history of a release from a fragmented commit graph is like trying to solve a puzzle with missing pieces. This makes it difficult to understand the context of changes and can hinder post-release analysis.
 
-Finally, a fragmented history makes it difficult to demonstrate compliance and can even lead to regulatory issues. In regulated environments, auditing requires a clear and traceable history of changes. 
+Finally, a fragmented history makes it difficult to demonstrate compliance and can even lead to regulatory issues. In regulated environments, auditing requires a clear and traceable history of changes.
 
 ## 2. Merge Conflicts
 
@@ -59,8 +59,8 @@ In this article, we have addressed several issues with git-flow: from increased 
 
 These limitations may seem minor individually, but they accumulate over time, resulting in a more complex, error-prone, and time-consuming workflow.
 
-[This is where git-flow-avh shines](how-git-flow-avh-improves-upon-git-flow). By adopting a streamlined merging strategy, it addresses these limitations head-on, offering a more robust and efficient workflow.
+[This is where git-flow-avh shines](https://git-flow.sh/blog/posts/how-git-flow-avh-improves-upon-git-flow). By adopting a streamlined merging strategy, it addresses these limitations head-on, offering a more robust and efficient workflow.
 
-We hope this deep dive into the hidden costs of the original `git-flow` helps you make informed decisions about your Git workflow. 
+We hope this deep dive into the hidden costs of the original `git-flow` helps you make informed decisions about your Git workflow.
 
 Stay tuned for more insights and tips on optimizing your version control practices! ✌️
