@@ -1,7 +1,7 @@
 ---
 import { Image, getImage } from 'astro:assets';
-import hero from '../assets/hero.png';
 import heroBg from '../assets/hero-bg.png';
+import gitFlowVideo from '../assets/git-flow-hero.mp4';
 
 const optimizedHeroBgWebP = await getImage({
   src: heroBg,
@@ -17,8 +17,16 @@ const optimizedHeroBgJpg = await getImage({
 
 <section data-webp-bg={optimizedHeroBgWebP.src} data-fallback-bg={optimizedHeroBgJpg.src}>
   <h1>Your favorite Git workflow.<br/>Reimagined.</h1>
-  <div class="hero-image">
-    <Image src={hero} alt="git-flow-next in the Terminal" width="896" height="573" loading="eager" />
+  <div class="hero-video">
+    <video
+      src={gitFlowVideo}
+      autoplay
+      loop
+      muted
+      playsinline
+      width="1200"
+      height="600"
+    />
   </div>
   <div class="copy-command">
     <div class="command-wrapper">
@@ -69,13 +77,17 @@ const optimizedHeroBgJpg = await getImage({
     text-shadow: 0px 4px 36px #B518B5;
     color: var(--main-white);
   }
-  .hero-image {
+  .hero-video {
     padding: 0 1rem;
-    img {
-      margin: auto;
-      border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    video {
+      width: 100%;
+      max-width: 800px;
       height: auto;
-      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 4px 36px rgba(181, 24, 181, 0.3);
     }
   }
   .copy-command {
