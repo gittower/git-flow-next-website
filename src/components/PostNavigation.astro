@@ -18,22 +18,18 @@ if (!prevPost && !nextPost) return null;
 
 <nav class="post-navigation" aria-label="Post navigation">
     {prevPost ? (
-    <a href={`${prevPost.slug}`} rel="prev">
-      <div class="nav-card">
-        <div class="nav-direction">Previous</div>
-        <div class="post-title">&lsaquo; {prevPost.data.title}</div>
-      </div>
+    <a href={`${prevPost.slug}`} rel="prev" class="nav-card">
+      <div class="nav-direction">Previous</div>
+      <div class="post-title">&lsaquo; {prevPost.data.title}</div>
     </a>
     ) : (
       <div class="nav-item empty"></div>
     )}
 
     {nextPost ? (
-      <a href={`${nextPost.slug}`} rel="next">
-        <div class="nav-card">
-          <div class="nav-direction">Next</div>
-          <div class="post-title">{nextPost.data.title} &rsaquo;</div>
-        </div>
+      <a href={`${nextPost.slug}`} rel="next" class="nav-card">
+        <div class="nav-direction">Next</div>
+        <div class="post-title">{nextPost.data.title} &rsaquo;</div>
       </a>
     ) : (
       <div class="nav-item empty"></div>
@@ -53,7 +49,8 @@ if (!prevPost && !nextPost) return null;
   a {
     border: none;
     &:hover {
-      border: none;
+      border: 1px solid var(--main-purple);
+      text-decoration: none;
     }
   }
   .nav-card {
@@ -63,9 +60,6 @@ if (!prevPost && !nextPost) return null;
     cursor: pointer;
     transition: .3s ease-in-out;
     height: 100%;
-    &:hover {
-      border: 1px solid var(--main-purple);
-    }
   }
   .nav-direction {
     color: rgba(239, 238, 255, 0.7);
@@ -75,5 +69,4 @@ if (!prevPost && !nextPost) return null;
     color: var(--main-white);
     font-weight: 700;
   }
-
 </style>

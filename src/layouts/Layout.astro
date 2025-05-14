@@ -142,12 +142,12 @@ const canonicalURL = Astro.url;
   }
   a {
     color: var(--main-purple);
-    transition: opacity 0.3s ease-in-out;
-    padding-bottom: 3px;
-    border-bottom: 2px solid transparent;
     text-decoration: none;
+    transition: all .3s ease-in-out;
     &:hover {
-      border-bottom: 2px solid var(--main-purple);
+      text-decoration: underline;
+      text-underline-offset: 5px;
+      text-decoration-color: var(--main-purple);
     }
   }
   pre {
