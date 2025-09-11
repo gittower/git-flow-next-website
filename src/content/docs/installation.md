@@ -14,9 +14,7 @@ Installing git-flow-next is a straight-forward process. We currently provide you
 Assuming you already have <a href="https://brew.sh/" target="_blank" rel="noreferrer noopener">Homebrew</a> installed, you can install git-flow-next with the following commands:
 
 ```bash
-
-brew tap gittower/git-flow-next
-brew install git-flow-next
+brew install gittower/tap/git-flow-next
 ```
 
 This is the recommended way if you are on a Mac.
