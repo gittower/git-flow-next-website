@@ -30,14 +30,14 @@ const canonicalURL = Astro.url;
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={` ${title} | git-flow-next `} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL('/src/assets/social-sharing.jpg', Astro.url)} />
+    <meta property="og:image" content={new URL('/og.png', Astro.url)} />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={` ${title} | git-flow-next `}/>
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL('/src/assets/social-sharing.jpg', Astro.url)} />
+    <meta property="twitter:image" content={new URL('/og.png', Astro.url)} />
 
     <!-- Analytics -->
     <GoogleAnalytics id="G-45T6WLGLVR" />
