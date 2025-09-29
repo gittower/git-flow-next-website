@@ -8,10 +8,9 @@ import icon from '../assets/icon.svg';
       <h2>What is git-flow-next?</h2>
       <p>Built on the original git-flow and gitflow-avh projects (both now discontinued), gitflow-next represents the next iteration of advanced Git workflow possibilities. It offers enhanced features and greater customization options for modern teams in fast-paced environments.</p>
       <p>Developed in Go, it prioritizes reliability, extensibility, and an improved developer experience.</p>
+      <p>Take a look at this short 5-minute video for an introduction to the capabilities of git-flow-next.</p>
     </div>
-    <div class="icon">
-      <img src={icon.src} width="457" height="280" alt="git-flow-next icon" loading="lazy" />
-    </div>
+    <div class="video-container"><iframe width="100%" height="315" src="https://www.youtube.com/embed/AFBUnYj6YfA?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
   </div>
 </section>
 
@@ -33,12 +32,5 @@ import icon from '../assets/icon.svg';
   }
   p {
     font-size: 1.125rem;
-  }
-  .icon {
-    order: -1;
-    justify-self: end;
-    @media (min-width: 768px) {
-      order: 0;
-    }
   }
 </style>
