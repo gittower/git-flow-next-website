@@ -1,0 +1,55 @@
+---
+import update from '../assets/workflows/gitlab-flow/git-flow-next-update.mp4';
+---
+
+<section class="update-branch-section">
+  <div class="container">
+    <div class="text-center">
+      <h2>Keeping Feature Branches Updated with <code>git-flow-next</code></h2>
+      <p>Easily integrate new commits from your parent branch into your feature branch by simply typing <code>git flow next update</code> ✌️</p>
+      <div class="video-container">
+        <video
+          src={update}
+          autoplay
+          loop
+          muted
+          playsinline
+          width="900"
+          height="600"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .update-branch-section {
+    background: #1E164D;
+    p {
+      max-width: 70ch;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+    }
+  }
+
+  .video-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    video {
+      width: 100%;
+      height: auto;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+  }
+</style>

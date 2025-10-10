@@ -1,0 +1,116 @@
+---
+import FeatureItem from '../components/FeatureItem.astro';
+import logo1 from '../assets/workflows/gitflow-next-logo.svg';
+import feature2 from '../assets/workflows/github-logo.svg';
+import feature3 from '../assets/workflows/gitlab-logo.svg';
+---
+
+<style>
+  .workflow-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+
+  .workflow-grid a {
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+</style>
+
+<section class="container">
+  <div class="title-section">
+    <h2 class="text-center">Supported Workflows</h2>
+    <p>Build any workflow you can think of. Use these presets as a starting point, then easily adjust them to fit your team's needs.</p>
+  </div>
+  <div class="four-columns">
+    <a href="/workflows/gitflow">
+      <FeatureItem
+        icon={logo1}
+        heading="Gitflow"
+        paragraph="The timeless classic."
+      />
+    </a>
+    <a href="/workflows/github-flow">
+      <FeatureItem
+        icon={feature2}
+        heading="GitHub Flow"
+        paragraph='Simple, speedy, and branch-focused.'
+      />
+    </a>
+    <a href="/workflows/gitlab-flow">
+      <FeatureItem
+        icon={feature3}
+        heading="GitLab Flow"
+        paragraph="A flow for every release need."
+      />
+    </a>
+    <a href="/workflows/custom-workflow">
+      <FeatureItem
+        icon={feature3}
+        heading="Start from scratch"
+        paragraph="Build your own custom configuration."
+      />
+    </a>
+  </div>
+</section>
+
+<style>
+  .title-section {
+    text-align: center;
+  }
+  section {
+    margin-top: 5rem;
+    @media (min-width: 768px) {
+      margin-top: 12.5rem;
+    }
+  }
+  .four-columns {
+    margin-top: 4rem;
+    margin-bottom: 3.5rem;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    a {
+      text-decoration: none;
+      
+      p, h3 {
+        text-decoration: none;
+      }
+      
+      &:hover,
+      &:hover p,
+      &:hover h3 {
+        text-decoration: none;
+      }
+    }
+
+    .feature-item {
+      border-radius: 12px;
+      border: 1px solid var(--main-purple);
+      padding: 1rem;
+      transition: border-color 300ms ease,box-shadow 300ms ease;
+      &:hover {
+        cursor: pointer;
+        box-shadow: 0px 0px 15px 3px var(--main-purple);
+      }
+
+    }
+
+    .feature-icon {
+      text-align: center;
+
+      img {
+        max-width: 50px;
+      }
+  }
+</style>

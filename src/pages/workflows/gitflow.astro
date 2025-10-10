@@ -1,0 +1,130 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdateBranch from '../../components/UpdateBranchTip.astro';
+import TowerPlug from '../../components/TowerPlug.astro';
+import overview from '../../assets/workflows/gitflow/gitflow-overview.png';
+import video from '../../assets/workflows/gitflow/gitflow-init.mp4';
+import tower from '../../assets/workflows/gitflow/gitflow-tower.png';
+---
+
+<Layout title="The Gitflow Workflow" description="Explore Gitflow, the classic model for scheduled releases. It uses two permanent branches (master and develop) and dedicated feature, release, and hotfix branches.">
+  <section class="container">
+    <div class="two-columns">
+      <div>
+        <h1>The "Gitflow" Workflow</h1>
+        <p>Gitflow is a strict, defined branching model designed to manage large projects and scheduled releases by separating development from release-focused work.</p>
+        <p>It relies on two permanent, core branches: <code>main</code> (or <code>master</code>), which only holds production-ready, tagged releases, and <code>develop</code>, which serves as the main integration branch for ongoing work. Developers create long-lived feature branches off of <code>develop</code> and dedicated release branches to prepare for new version rollouts.</p>
+        <p>This multi-branch structure is highly effective for teams requiring scheduled, infrequent releases and maintaining a rigorous history of versioned code.</p>
+      </div>
+      <div class="video-container">
+        <video
+          src={video}
+          autoplay
+          loop
+          muted
+          playsinline
+          width="900"
+          height="600"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <h2>How Gitflow Works</h2>
+    <div class="two-columns workflow-overview">
+      <div>
+        <img src={overview.src} width="1160" height="1100" alt="Gitflow – Overview" />
+      </div>
+      <div>
+        <h3>Base Branches</h3>
+        <ul>
+          <li><code>main</code>: This is the ultimate source of truth, holding the code that is currently in production. Commits on this branch must be tagged with a version number and are the only commits considered official releases.</li>
+          <li><code>develop</code>: This is the primary branch for all ongoing development. It integrates all completed features and reflects the latest deliverable state of the project for the next major release.</li>
+        </ul>
+        <h3>Topic Branches</h3>
+        <ul>
+          <li><code>feature/*</code>: Used for all new functionality.</li>
+          <li><code>bugfix/*</code>: Reserved for bugfixes.</li>
+          <li><code>release/*</code>: Used to prepare a new production release. No new features are added here; it's strictly for polishing and bug fixing.</li>
+          <li><code>hotfix/*</code>: Reserved for urgent, production-breaking fixes.</li>
+          <li><code>support/*</code> (optional): Used to manage and maintain older, currently supported versions of the software that are still in use.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <UpdateBranch/>
+
+  <section class="container">
+    <div class="two-columns">
+      <TowerPlug workflowName="Gitflow"/>
+      <div>
+        <img src={tower.src} width="1160" height="1100" alt="Gitflow in Tower – Overview" />
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+
+section:first-of-type {
+  border-bottom: 1px solid #1E164D;
+}
+
+  img {
+    border-radius: 12px;
+  }
+
+  ul {
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+  }
+  li {
+    padding-left: 0;
+    font-size: 1.125rem;
+  }
+
+  section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+  h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    padding-bottom: 1rem;
+  }
+  .two-columns {
+    display: grid;
+    gap: 6rem;
+    grid-template-columns: 1fr;
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  p {
+    font-size: 1.125rem;
+  }
+
+  .video-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    video {
+      width: 100%;
+      height: auto;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+  }
+  </style>

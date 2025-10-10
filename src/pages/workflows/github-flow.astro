@@ -1,0 +1,126 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdateBranch from '../../components/UpdateBranchTip.astro';
+import TowerPlug from '../../components/TowerPlug.astro';
+import overview from '../../assets/workflows/github-flow/github-flow-overview.png';
+import video from '../../assets/workflows/github-flow/github-flow-init.mp4';
+import tower from '../../assets/workflows/github-flow/github-flow-tower.png';
+---
+
+<Layout title="The GitHub Flow Workflow" description="The most lightweight Git workflow. Learn how GitHub Flow uses a single, stable main branch and Pull Requests to enable continuous integration and rapid delivery.">
+  <section class="container">
+    <div class="two-columns">
+      <div>
+        <h1>The "GitHub Flow" Workflow</h1>
+        <p>GitHub Flow is a lightweight, continuous delivery-focused Git workflow that emphasizes simplicity and speed by centering on a single, core branch.</p>
+        <p>It maintains a single, perpetually stable <code>main</code> (or <code>master</code>) branch that always reflects the latest deployable code, effectively treating <code>main</code> as production. For all work, developers create short-lived, descriptive topic branches off of <code>main</code> (e.g., <code>add-user-login</code> or <code>fix-api-bug</code>).</p>
+        <p>All integration, review, and testing is performed through a Pull Request (PR); once approved, the topic branch is merged into <code>main</code> and immediately deployed to production, ensuring a smooth and rapid release cycle.</p>
+      </div>
+      <div class="video-container">
+        <video
+          src={video}
+          autoplay
+          loop
+          muted
+          playsinline
+          width="900"
+          height="600"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <h2>How GitHub Flow Works</h2>
+    <div class="two-columns workflow-overview">
+      <div>
+        <img src={overview.src} width="1160" height="1100" alt="GitHub Flow – Overview" />
+      </div>
+      <div>
+        <h3>Base Branches</h3>
+        <ul>
+          <li><code>main</code> (Root Branch): This is the single source of truth and the only base branch. In GitHub Flow, the <code>main</code> branch is always stable, tested, and deployable. It reflects the latest code that is currently in production or ready to be deployed instantly. There are no separate staging or production branches.</li>
+        </ul>
+        <h3>Topic Branches</h3>
+        <ul>
+          <li><code>feature/*</code>: This category covers all development work: new features, refactors, and bug fixes.</li>
+        </ul>
+        <p>Work is integrated back into <code>main</code> after a Pull Request (PR) review. The PR is the central mechanism for testing and approval.</p>
+      </div>
+    </div>
+  </section>
+
+  <UpdateBranch/>
+
+  <section class="container">
+    <div class="two-columns">
+      <TowerPlug workflowName="GitHub Flow"/>
+      <div>
+        <img src={tower.src} width="1160" height="1100" alt="GitHub Flow in Tower – Overview" />
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+
+section:first-of-type {
+  border-bottom: 1px solid #1E164D;
+}
+
+  img {
+    border-radius: 12px;
+  }
+
+  ul {
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+  }
+  li {
+    padding-left: 0;
+    font-size: 1.125rem;
+  }
+
+  section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+  h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    padding-bottom: 1rem;
+  }
+  .two-columns {
+    display: grid;
+    gap: 6rem;
+    grid-template-columns: 1fr;
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  p {
+    font-size: 1.125rem;
+  }
+
+  .video-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    video {
+      width: 100%;
+      height: auto;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+  }
+  </style>

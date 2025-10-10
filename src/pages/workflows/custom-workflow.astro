@@ -1,0 +1,107 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UpdateBranch from '../../components/UpdateBranchTip.astro';
+import TowerPlug from '../../components/TowerPlug.astro';
+import video from '../../assets/workflows/custom-workflow/custom-workflow-init.mp4';
+import tower from '../../assets/workflows/custom-workflow/custom-workflow-tower.png';
+---
+
+<Layout title="Creating a Custom Branching Workflow" description="git-flow-next provides a fully customizable branching strategy built around your team's specific needs, not a framework's rules.">
+  <section class="container">
+    <div class="two-columns">
+      <div>
+        <h1>Creating a Custom Branching Workflow</h1>
+        <p>You don't have to follow a rigid, one-size-fits-all Git models like GitFlow or GitHub Flow. Our tool provides a fully customizable branching strategy built around your team's specific needs, not a framework's rules.</p>
+        <p>This dynamic system lets you define any number of core branches (e.g., <code>main</code>, <code>staging</code>, <code>production</code>…), along with custom topic branch types (e.g., <code>feature/*</code> or <code>hotfix/*</code>). </p>
+        <p>You have total control over the rules: specify which parent branch new work starts from and precisely which branches it can merge into. </p>
+        <p>This capability allows you to design and enforce a workflow that perfectly aligns with your deployment pipeline, ensuring a clean, error-free Git history no matter how complex your project is.</p>
+        <p><a href="/docs">For more information, check the docs.</a></p>
+      </div>
+      <div class="video-container">
+        <video
+          src={video}
+          autoplay
+          loop
+          muted
+          playsinline
+          width="900"
+          height="600"
+        />
+      </div>
+    </div>
+  </section>
+
+  <UpdateBranch/>
+
+  <section class="container">
+    <div class="two-columns">
+      <TowerPlug workflowName="Creating a Custom Workflow"/>
+      <div>
+        <img src={tower.src} width="1160" height="1100" alt="Creating a Custom Workflow – Overview" />
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+
+section:first-of-type {
+  border-bottom: 1px solid #1E164D;
+}
+
+  img {
+    border-radius: 12px;
+  }
+
+  ul {
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+  }
+  li {
+    padding-left: 0;
+    font-size: 1.125rem;
+  }
+
+  section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+  h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    padding-bottom: 1rem;
+  }
+  .two-columns {
+    display: grid;
+    gap: 6rem;
+    grid-template-columns: 1fr;
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  p {
+    font-size: 1.125rem;
+  }
+
+  .video-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    video {
+      width: 100%;
+      height: auto;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+  }
+  </style>
