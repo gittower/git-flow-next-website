@@ -10,11 +10,33 @@ const currentPath = Astro.url.pathname;
       <a href="/" class="logo">
         <img src={logo.src} width="178" height="32" alt="git-flow-next logo" />
       </a>
-      <div>
+
+      <!-- Hamburger Menu Button -->
+      <button class="hamburger-menu" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <div class="menu-wrapper">
         <ul class="menu">
           <li><a href="/docs" class={currentPath.startsWith('/docs') ? 'active' : ''}>Docs</a></li>
+          <li class="dropdown">
+            <a href="#" class={currentPath.startsWith('/workflows') ? 'active' : ''} aria-haspopup="true" aria-expanded="false">
+              Workflows
+              <svg class="dropdown-icon" width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/workflows/gitflow" role="menuitem" class={currentPath.startsWith('/workflows/gitflow') ? 'active' : ''}>Gitflow</a></li>
+              <li><a href="/workflows/github-flow" role="menuitem" class={currentPath.startsWith('/workflows/github-flow') ? 'active' : ''}>GitHub Flow</a></li>
+              <li><a href="/workflows/gitlab-flow" role="menuitem" class={currentPath.startsWith('/workflows/gitlab-flow') ? 'active' : ''}>GitLab Flow</a></li>
+              <li><a href="/workflows/custom-workflow" role="menuitem" class={currentPath.startsWith('/workflows/custom-workflow') ? 'active' : ''}>Start from scratch</a></li>
+            </ul>
+          </li>
           <li><a href="/blog" class={currentPath.startsWith('/blog') ? 'active' : ''}>Blog</a></li>
-          <li><a href="https://github.com/gittower/git-flow-next/" target="_blank" rel="noreferrer noopener" aria-label="GitHub repository for git-flow-next"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 16 16" width="20" role="img" class="d-block"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a></li>
+          <li class="github-link"><a href="https://github.com/gittower/git-flow-next/" target="_blank" rel="noreferrer noopener" aria-label="GitHub repository for git-flow-next"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 16 16" width="20" role="img" class="d-block"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a></li>
         </ul>
       </div>
     </div>
@@ -24,6 +46,7 @@ const currentPath = Astro.url.pathname;
   header {
     padding: 1.125rem 0;
     border-bottom: 1px solid #4635B14D;
+    position: relative;
   }
   .menu-items {
     width: 100%;
@@ -36,32 +59,361 @@ const currentPath = Astro.url.pathname;
     border: none;
     padding: .5rem 0;
   }
+
+  /* Hamburger Menu */
+  .hamburger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+
+    @media (max-width: 767px) {
+      display: flex;
+    }
+  }
+
+  .hamburger-line {
+    width: 100%;
+    height: 2px;
+    background-color: var(--main-white);
+    transition: all 0.3s ease;
+    border-radius: 2px;
+  }
+
+  .hamburger-menu.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger-menu.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-menu.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+
+  .menu-wrapper {
+    @media (max-width: 767px) {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      right: 0;
+      background: var(--main-black);
+      border-top: 1px solid #4635B14D;
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+  }
+
+  .menu-wrapper.active {
+    @media (max-width: 767px) {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
   .menu {
     display: flex;
     flex-direction: row;
     align-items: center;
     list-style-type: none;
     gap: 2.5rem;
-    @media (max-width: 767px) {
-      gap: 1.25rem;
-    }
     line-height: 1.875rem;
+
+    @media (max-width: 767px) {
+      background-color: var(--light-purple);
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 1rem;
+    }
+
     li {
       padding-left: 0;
-      &:last-child {
-        @media (max-width: 767px) {
-          display: none;
+
+      @media (max-width: 767px) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        &:last-child {
+          border-bottom: none;
         }
       }
     }
     a {
       color: var(--main-white);
       text-decoration-color: var(--main-purple);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      @media (max-width: 767px) {
+        padding: 1rem 0;
+        justify-content: space-between;
+      }
     }
     .active {
       text-decoration: underline;
       text-underline-offset: 5px;
       text-decoration-color: var(--main-purple);
     }
+
+  }
+
+  /* Dropdown Styles */
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown-icon {
+    transition: transform 0.2s ease;
+  }
+
+  .dropdown:hover .dropdown-icon,
+  .dropdown:focus-within .dropdown-icon {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--light-purple);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(70, 53, 177, 0.3);
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0.5rem 0 0 0;
+  }
+
+  .dropdown:hover .dropdown-menu,
+  .dropdown:focus-within .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .dropdown-menu li {
+    padding: 0;
+  }
+
+  .dropdown-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--main-white);
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    border-radius: 4px;
+    margin: 0 0.5rem;
+  }
+
+  .dropdown-menu a:hover,
+  .dropdown-menu a:focus {
+    background-color: rgba(70, 53, 177, 0.2);
+    text-decoration: none;
+  }
+
+  .dropdown-menu a.active {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--main-purple);
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 767px) {
+    .dropdown-menu {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      box-shadow: none;
+      border: none;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    .dropdown.dropdown-open .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-menu a {
+      padding: 0.75rem 1rem;
+      margin: 0;
+      border-radius: 0;
+    }
+
+    .dropdown-menu li:first-child a {
+      border-radius: 8px 8px 0 0;
+    }
+
+    .dropdown-menu li:last-child a {
+      border-radius: 0 0 8px 8px;
+    }
   }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Hamburger menu functionality
+  const hamburger = document.querySelector('.hamburger-menu');
+  const menuWrapper = document.querySelector('.menu-wrapper');
+
+  if (hamburger && menuWrapper) {
+    hamburger.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const isActive = hamburger.classList.contains('active');
+
+      if (isActive) {
+        hamburger.classList.remove('active');
+        menuWrapper.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      } else {
+        hamburger.classList.add('active');
+        menuWrapper.classList.add('active');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!hamburger.contains(e.target as Node) && !menuWrapper.contains(e.target as Node)) {
+        hamburger.classList.remove('active');
+        menuWrapper.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // Dropdown functionality
+  const dropdown = document.querySelector('.dropdown');
+  const dropdownToggle = dropdown?.querySelector('a[aria-haspopup="true"]');
+  const dropdownMenu = dropdown?.querySelector('.dropdown-menu');
+  const menuItems = dropdownMenu?.querySelectorAll('a[role="menuitem"]');
+
+  if (!dropdown || !dropdownToggle || !dropdownMenu || !menuItems) return;
+
+  let isOpen = false;
+  const isMobile = () => window.innerWidth <= 767;
+
+  function openDropdown() {
+    isOpen = true;
+    dropdownToggle.setAttribute('aria-expanded', 'true');
+
+    if (isMobile()) {
+      dropdown.classList.add('dropdown-open');
+    } else {
+      (dropdownMenu as HTMLElement).style.display = 'block';
+      (menuItems[0] as HTMLElement)?.focus();
+    }
+  }
+
+  function closeDropdown() {
+    isOpen = false;
+    dropdownToggle.setAttribute('aria-expanded', 'false');
+
+    if (isMobile()) {
+      dropdown.classList.remove('dropdown-open');
+    } else {
+      (dropdownMenu as HTMLElement).style.display = '';
+    }
+  }
+
+  // Handle click on dropdown toggle
+  dropdownToggle.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (isOpen) {
+      closeDropdown();
+    } else {
+      openDropdown();
+    }
+  });
+
+  // Handle keyboard navigation
+  dropdownToggle.addEventListener('keydown', function(e) {
+    const keyEvent = e as KeyboardEvent;
+    if (keyEvent.key === 'Enter' || keyEvent.key === ' ' || keyEvent.key === 'ArrowDown') {
+      e.preventDefault();
+      openDropdown();
+    }
+  });
+
+  // Handle keyboard navigation within menu
+  menuItems.forEach((item, index) => {
+    item.addEventListener('keydown', function(e) {
+      const keyEvent = e as KeyboardEvent;
+      switch (keyEvent.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          const nextIndex = (index + 1) % menuItems.length;
+          (menuItems[nextIndex] as HTMLElement).focus();
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          const prevIndex = (index - 1 + menuItems.length) % menuItems.length;
+          (menuItems[prevIndex] as HTMLElement).focus();
+          break;
+        case 'Escape':
+          e.preventDefault();
+          closeDropdown();
+          (dropdownToggle as HTMLElement).focus();
+          break;
+        case 'Tab':
+          if (keyEvent.shiftKey && index === 0) {
+            closeDropdown();
+          } else if (!keyEvent.shiftKey && index === menuItems.length - 1) {
+            closeDropdown();
+          }
+          break;
+      }
+    });
+  });
+
+  // Close dropdown when clicking outside (only for desktop)
+  document.addEventListener('click', function(e) {
+    if (!dropdown.contains(e.target as Node) && !isMobile()) {
+      closeDropdown();
+    }
+  });
+
+  // Close dropdown when focus leaves (only for desktop)
+  if (!isMobile()) {
+    dropdown.addEventListener('focusout', function(e) {
+      // Use setTimeout to allow focus to settle before checking
+      setTimeout(() => {
+        if (!dropdown.contains(document.activeElement)) {
+          closeDropdown();
+        }
+      }, 100);
+    });
+  }
+
+  // Handle window resize to reset mobile menu state
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 767) {
+      hamburger?.classList.remove('active');
+      menuWrapper?.classList.remove('active');
+      hamburger?.setAttribute('aria-expanded', 'false');
+      dropdown?.classList.remove('dropdown-open');
+    }
+  });
+});
+</script>
