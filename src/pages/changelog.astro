@@ -1,0 +1,145 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+
+const title = "Changelog";
+const description = "View the complete changelog for git-flow-next releases.";
+
+// Define headings for table of contents
+const headings = [
+  { slug: '020---2026-01-11', text: '[0.2.0] - 2026-01-11' },
+  { slug: '011---2025-09-24', text: '[0.1.1] - 2025-09-24' },
+  { slug: '010---2025-09-16', text: '[0.1.0] - 2025-09-16' }
+];
+---
+
+<Layout title={title} description={description}>
+  <section>
+
+    <aside>
+      <TableOfContents title="Table of Contents" headings={headings} />
+    </aside>
+
+    <article>
+      <h1>{title}</h1>
+      
+      <div class="blog-post">
+        <p>All notable changes to this project will be documented in this file.</p>
+      
+      <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/" target="_blank" rel="noopener noreferrer">Keep a Changelog</a>, and this project adheres to <a href="https://semver.org/spec/v2.0.0.html" target="_blank" rel="noopener noreferrer">Semantic Versioning</a>.</p>
+
+      <h2 id="020---2026-01-11">[0.2.0] - 2026-01-11</h2>
+      
+      <h3>Added</h3>
+      <ul>
+        <li>Add <code>track</code> command for topic branches to track existing remote branches</li>
+        <li>Add <code>--fetch</code> option for topic branch finish command</li>
+      </ul>
+      
+      <h3>Fixed</h3>
+      <ul>
+        <li>Create base branches in dependency order during init</li>
+        <li>Fix docs link in README.md</li>
+      </ul>
+      
+      <h3>Changed</h3>
+      <ul>
+        <li>Optimize binary size (~50% reduction)</li>
+      </ul>
+
+      <h2 id="011---2025-09-24">[0.1.1] - 2025-09-24</h2>
+      
+      <h3>Fixed</h3>
+      <ul>
+        <li>Minor bug fixes and improvements</li>
+      </ul>
+
+      <h2 id="010---2025-09-16">[0.1.0] - 2025-09-16</h2>
+      
+      <h3>Added</h3>
+      <ul>
+        <li>Initial release of git-flow-next</li>
+        <li>Support for feature, release, hotfix, and support branches</li>
+        <li>Configurable merge strategies (merge, rebase, squash)</li>
+        <li>Three-layer configuration precedence (defaults → git config → CLI flags)</li>
+        <li>State machine for finish command with conflict recovery</li>
+        <li>Automatic child branch updates with <code>autoUpdate</code> configuration</li>
+        <li>Import configuration from git-flow-avh</li>
+      </ul>
+      </div>
+    </article>
+
+  </section>
+</Layout>
+
+<style>
+  section {
+    max-width: 1040px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 3.5rem 1rem 6.5rem;
+    @media (max-width: 767px) {
+      display: block;
+    }
+  }
+
+  aside {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    section {
+      grid-template-columns: minmax(0, 15rem) 1fr;
+      gap: 2.5rem;
+    }
+
+    aside {
+      display: block;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    section {
+      gap: 6rem;
+    }
+  }
+
+  h1 {
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  h3 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--main-green);
+  }
+
+  ul {
+    margin-bottom: 2rem;
+    padding-left: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  code {
+    background: rgba(70, 53, 177, 0.2);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  }
+
+  p {
+    margin-bottom: 2rem;
+  }
+</style>

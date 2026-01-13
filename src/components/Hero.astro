@@ -28,6 +28,12 @@ const optimizedHeroBgJpg = await getImage({
       height="600"
     />
   </div>
+  <div class="version-badge">
+    <a href="/changelog" class="version-link">
+      <span class="version-label">Current version:</span>
+      <span class="version-number">0.2</span>
+    </a>
+  </div>
   <div class="copy-command">
     <div class="command-wrapper">
       <code id="command">
@@ -102,7 +108,7 @@ const optimizedHeroBgJpg = await getImage({
   }
   .copy-command {
     display: inline-block;
-    margin-top: 3.5rem;
+    margin-top: 1.5rem;
     background: #4635B133;
     padding: 1rem;
     border-radius: 10px;
@@ -143,6 +149,41 @@ const optimizedHeroBgJpg = await getImage({
   .hidden {
     opacity: 0;
   }
+  .version-badge {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .version-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(70, 53, 177, 0.1);
+    border: 1px solid rgba(174, 234, 148, 0.2);
+    border-radius: 16px;
+    color: rgba(174, 234, 148, 0.8);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 400;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .version-link:hover {
+    background: rgba(70, 53, 177, 0.2);
+    border-color: rgba(174, 234, 148, 0.4);
+    color: var(--main-green);
+    text-decoration: none;
+  }
+
+  .version-label {
+    opacity: 0.9;
+  }
+
+  .version-number {
+    font-weight: 500;
+  }
+
   .other-options {
     padding-top: 1rem;
     padding-bottom: 3rem;
