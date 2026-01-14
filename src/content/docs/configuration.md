@@ -121,8 +121,11 @@ Merge strategy when merging to parent (**merge**, **rebase**, **squash**)
 **--downstream-strategy=strategy**  
 Merge strategy when updating from parent (**merge**, **rebase**)
 
-**--tag[=bool]**  
+**--tag[=bool]**
 Create tags on finish (default: false)
+
+**--force-delete[=bool]**
+Force delete branch even if not fully merged (default: false)
 
 ## Configuration Examples
 
@@ -216,6 +219,7 @@ git config gitflow.branch.<type>.downstreamstrategy <merge|rebase>
 git config gitflow.branch.<type>.tag <true|false>
 git config gitflow.branch.<type>.tagprefix <prefix>
 git config gitflow.branch.<type>.autoupdate <true|false>
+git config gitflow.branch.<type>.forcedelete <true|false>
 ```
 
 ### Command Overrides
@@ -232,6 +236,70 @@ git config gitflow.<type>.finish.tag <true|false>
 git config gitflow.<type>.finish.sign <true|false>
 git config gitflow.<type>.finish.signingkey <keyid>
 git config gitflow.<type>.finish.keep <true|false>
+git config gitflow.<type>.finish.force-delete <true|false>
+```
+
+## Hooks and Filters
+
+git-flow-next supports custom hooks and filters that execute at various points during git-flow operations. Scripts are located in `.git/hooks/` and follow specific naming patterns.
+
+### Hooks
+
+Hooks are shell scripts that run before or after git-flow operations. They receive context via environment variables.
+
+**Naming Pattern**: `{pre,post}-flow-{type}-{action}`
+
+**Available Actions**:
+- `start` - Creating a new topic branch
+- `finish` - Completing a topic branch
+- `publish` - Pushing a branch to remote
+- `track` - Tracking a remote branch
+- `delete` - Deleting a topic branch
+- `update` - Updating from parent branch
+
+**Environment Variables**:
+- `GITFLOW_BRANCH_TYPE` - The type of branch (feature, release, etc.)
+- `GITFLOW_BRANCH_NAME` - The short name of the branch
+- `GITFLOW_FULL_BRANCH` - The full branch name with prefix
+- `GITFLOW_BASE_BRANCH` - The parent branch
+- `GITFLOW_ORIGIN` - The remote name
+- `GITFLOW_VERSION` - The version (for release/hotfix branches)
+
+**Examples**:
+```bash
+# .git/hooks/pre-flow-feature-start - Runs before starting a feature
+#!/bin/bash
+echo "Starting feature: $GITFLOW_BRANCH_NAME"
+
+# .git/hooks/post-flow-release-finish - Runs after finishing a release
+#!/bin/bash
+echo "Released version: $GITFLOW_VERSION"
+# Trigger CI/CD deployment, notify team, etc.
+```
+
+### Filters
+
+Filters transform values during git-flow operations. They receive input via stdin and output the transformed value to stdout.
+
+**Naming Pattern**: `filter-flow-{type}-{action}-{target}`
+
+**Available Targets**:
+- `version` - Filter the version/name on start operations
+- `tag-message` - Filter the tag message on finish operations
+
+**Examples**:
+```bash
+# .git/hooks/filter-flow-release-start-version - Transform release version
+#!/bin/bash
+# Prepend 'v' to version numbers
+read VERSION
+echo "v$VERSION"
+
+# .git/hooks/filter-flow-release-finish-tag-message - Transform tag message
+#!/bin/bash
+# Add standard prefix to tag messages
+read MESSAGE
+echo "Release: $MESSAGE"
 ```
 
 ## git-flow-avh Compatibility

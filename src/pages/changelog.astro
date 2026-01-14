@@ -7,6 +7,7 @@ const description = "View the complete changelog for git-flow-next releases.";
 
 // Define headings for table of contents
 const headings = [
+  { slug: '030---2026-01-14', text: '[0.3.0] - 2026-01-14' },
   { slug: '020---2026-01-11', text: '[0.2.0] - 2026-01-11' },
   { slug: '011---2025-09-24', text: '[0.1.1] - 2025-09-24' },
   { slug: '010---2025-09-16', text: '[0.1.0] - 2025-09-16' }
@@ -27,6 +28,29 @@ const headings = [
         <p>All notable changes to this project will be documented in this file.</p>
       
       <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/" target="_blank" rel="noopener noreferrer">Keep a Changelog</a>, and this project adheres to <a href="https://semver.org/spec/v2.0.0.html" target="_blank" rel="noopener noreferrer">Semantic Versioning</a>.</p>
+
+      <h2 id="030---2026-01-14">[0.3.0] - 2026-01-14</h2>
+
+      <h3>Added</h3>
+      <ul>
+        <li>Add hooks and filters system for customizing git-flow operations
+          <ul>
+            <li>Pre/post hooks for start, finish, publish, track, delete, and update actions</li>
+            <li>Version filters for topic branches on start</li>
+            <li>Tag message filters for topic branches that create tags on finish</li>
+          </ul>
+        </li>
+        <li>Add <code>publish</code> command for topic branches to push branches to remote</li>
+        <li>Add <code>--squash-message</code> option for custom squash commit messages on finish</li>
+        <li>Add config support for force deletion (<code>gitflow.branch.&lt;type&gt;.forceDelete</code>)</li>
+      </ul>
+
+      <h3>Fixed</h3>
+      <ul>
+        <li>Fix worktree support for hooks, filters, and merge state</li>
+        <li>Fix shorthand <code>git flow publish</code> command (was returning "not implemented")</li>
+        <li>Fix <code>git flow &lt;type&gt; finish</code> to allow optional branch name (uses current branch)</li>
+      </ul>
 
       <h2 id="020---2026-01-11">[0.2.0] - 2026-01-11</h2>
       

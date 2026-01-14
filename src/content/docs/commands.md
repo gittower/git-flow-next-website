@@ -254,6 +254,7 @@ git-flow finish [options]  # shorthand for current branch
 **Merge Strategy Control**
 - `--rebase` - Rebase topic branch before merging
 - `--squash` - Squash all commits into single commit
+- `--squash-message <message>` - Custom commit message for squash merge
 - `--no-rebase` - Don't rebase (use configured strategy)
 - `--no-squash` - Keep individual commits
 - `--preserve-merges` - Preserve merges during rebase
@@ -281,6 +282,33 @@ git flow feature finish my-feature --rebase
 
 # Squash all commits
 git flow feature finish my-feature --squash
+
+# Squash with custom commit message
+git flow feature finish my-feature --squash --squash-message "feat: add user authentication"
+```
+
+---
+
+### publish
+
+Push a topic branch to the remote repository, making it available for other team members to track.
+
+**Usage**
+```bash
+git-flow <topic> publish [name]
+git-flow publish [name]  # shorthand for current branch
+```
+
+**Examples**
+```bash
+# Publish current feature branch
+git flow feature publish
+
+# Publish specific feature
+git flow feature publish user-authentication
+
+# Publish using shorthand
+git flow publish
 ```
 
 ---
@@ -400,6 +428,7 @@ These commands work on the current branch or accept an optional branch name:
 - `git-flow rebase [name]` - Rebase current or specified topic branch (alias for update --rebase)
 - `git-flow rename [new-name]` - Rename current topic branch
 - `git-flow finish [name]` - Finish current or specified topic branch
+- `git-flow publish [name]` - Push current or specified topic branch to remote
 
 ---
 
