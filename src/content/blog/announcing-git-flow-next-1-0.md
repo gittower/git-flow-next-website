@@ -47,7 +47,7 @@ Best of all, your old configuration remains in place, so you can switch back at 
 
 With 1.0 out the door, we're already looking ahead. Here are some exciting features on our roadmap.
 
-### Automatic Worktree Support for Topic Branches
+### 1. Automatic Worktree Support for Topic Branches
 
 We're planning to add automatic worktree support to topic branches. This will make it incredibly easy to use your repository in agentic workflows where you need to work on multiple features simultaneously.
 
@@ -61,7 +61,7 @@ This is especially useful for AI-assisted development workflows where you might 
 
 Want to follow along or contribute to the discussion? Check out <a href="https://github.com/gittower/git-flow-next/discussions/45" target="_blank" rel="noopener noreferrer">the GitHub discussion</a>.
 
-### Pull Request Integration
+### 2. Pull Request Integration
 
 We're also working on tighter integration with your favorite Git hosting services through pull requests. Instead of finishing a branch locally with `git flow finish`, you'll be able to:
 
