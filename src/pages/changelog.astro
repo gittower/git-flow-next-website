@@ -7,6 +7,7 @@ const description = "View the complete changelog for git-flow-next releases.";
 
 // Define headings for table of contents
 const headings = [
+  { slug: '100---2026-02-08', text: '[1.0.0] - 2026-02-08' },
   { slug: '030---2026-01-14', text: '[0.3.0] - 2026-01-14' },
   { slug: '020---2026-01-11', text: '[0.2.0] - 2026-01-11' },
   { slug: '011---2025-09-24', text: '[0.1.1] - 2025-09-24' },
@@ -28,6 +29,34 @@ const headings = [
         <p>All notable changes to this project will be documented in this file.</p>
       
       <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/" target="_blank" rel="noopener noreferrer">Keep a Changelog</a>, and this project adheres to <a href="https://semver.org/spec/v2.0.0.html" target="_blank" rel="noopener noreferrer">Semantic Versioning</a>.</p>
+
+      <h2 id="100---2026-02-08">[1.0.0] - 2026-02-08</h2>
+
+      <h3>Added</h3>
+      <ul>
+        <li>Add <code>--force</code> flag to <code>init</code> command for reconfiguring existing repositories</li>
+        <li>Add configuration scope options to <code>init</code>: <code>--local</code>, <code>--global</code>, <code>--system</code>, <code>--file</code></li>
+        <li>Add <code>overview</code> command with <code>--format</code> (text/json/yaml), <code>--verbose</code>, and <code>--no-color</code> options</li>
+        <li>Add health checks and workflow status reporting to <code>overview</code></li>
+        <li>Add <code>--merge-message</code> / <code>-M</code> option for custom upstream merge commit messages on finish</li>
+        <li>Add <code>--update-message</code> option for custom child branch update messages on finish</li>
+        <li>Add message placeholder support (<code>%b</code>, <code>%B</code>, <code>%p</code>, <code>%P</code>, <code>%%</code>) for merge and update messages</li>
+        <li>Add <code>--no-verify</code> option to bypass hooks during finish operations</li>
+        <li>Add <code>--fetch</code> / <code>--no-fetch</code> options to finish command</li>
+        <li>Add remote sync check before finish (aborts if behind/diverged, use <code>--force</code> to bypass)</li>
+        <li>Add <code>--remote</code> / <code>--no-remote</code> options to delete command</li>
+        <li>Add <code>--rebase</code> option to update command</li>
+        <li>Add pattern filtering to list command with shell-style globbing</li>
+        <li>Add partial name matching to checkout command</li>
+        <li>Add positional argument support for hooks (git-flow-avh compatibility)</li>
+        <li>Add <code>mergemessage</code>, <code>updatemessage</code>, <code>noverify</code>, and <code>fetch</code> config keys for finish overrides</li>
+      </ul>
+
+      <h3>Changed</h3>
+      <ul>
+        <li>Finish command now fetches from remote by default before merging</li>
+        <li>Promoted to stable 1.0 release</li>
+      </ul>
 
       <h2 id="030---2026-01-14">[0.3.0] - 2026-01-14</h2>
 
