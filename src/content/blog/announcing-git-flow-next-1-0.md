@@ -1,6 +1,6 @@
 ---
 title: 'Announcing git-flow-next 1.0: Compatibility, Flexibility, and What''s Coming Next'
-pubDate: 2026-02-03
+pubDate: 2026-02-09
 description: 'git-flow-next 1.0 is here with full git-flow and git-flow-avh compatibility, customizable branch configuration, seamless migration, and an exciting roadmap ahead.'
 author: 'Alexander Rinass'
 ---
