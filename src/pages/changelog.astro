@@ -24,38 +24,29 @@ const headings = [
 
     <article>
       <h1>{title}</h1>
-      
+
       <div class="blog-post">
-        <p>All notable changes to this project will be documented in this file.</p>
-      
-      <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/" target="_blank" rel="noopener noreferrer">Keep a Changelog</a>, and this project adheres to <a href="https://semver.org/spec/v2.0.0.html" target="_blank" rel="noopener noreferrer">Semantic Versioning</a>.</p>
 
       <h2 id="100---2026-02-08">[1.0.0] - 2026-02-08</h2>
 
       <h3>Added</h3>
       <ul>
-        <li>Add <code>--force</code> flag to <code>init</code> command for reconfiguring existing repositories</li>
-        <li>Add configuration scope options to <code>init</code>: <code>--local</code>, <code>--global</code>, <code>--system</code>, <code>--file</code></li>
-        <li>Add <code>overview</code> command with <code>--format</code> (text/json/yaml), <code>--verbose</code>, and <code>--no-color</code> options</li>
-        <li>Add health checks and workflow status reporting to <code>overview</code></li>
-        <li>Add <code>--merge-message</code> / <code>-M</code> option for custom upstream merge commit messages on finish</li>
-        <li>Add <code>--update-message</code> option for custom child branch update messages on finish</li>
-        <li>Add message placeholder support (<code>%b</code>, <code>%B</code>, <code>%p</code>, <code>%P</code>, <code>%%</code>) for merge and update messages</li>
-        <li>Add <code>--no-verify</code> option to bypass hooks during finish operations</li>
-        <li>Add <code>--fetch</code> / <code>--no-fetch</code> options to finish command</li>
-        <li>Add remote sync check before finish (aborts if behind/diverged, use <code>--force</code> to bypass)</li>
-        <li>Add <code>--remote</code> / <code>--no-remote</code> options to delete command</li>
-        <li>Add <code>--rebase</code> option to update command</li>
-        <li>Add pattern filtering to list command with shell-style globbing</li>
-        <li>Add partial name matching to checkout command</li>
-        <li>Add positional argument support for hooks (git-flow-avh compatibility)</li>
-        <li>Add <code>mergemessage</code>, <code>updatemessage</code>, <code>noverify</code>, and <code>fetch</code> config keys for finish overrides</li>
+        <li><code>--no-verify</code> option for finish command to skip git hooks during merge</li>
+        <li><code>--merge-message</code> and <code>--update-message</code> options for finish command with placeholder support</li>
+        <li>Git config support for merge message options (<code>gitflow.&lt;type&gt;.finish.mergeMessage</code>, <code>gitflow.&lt;type&gt;.finish.updateMessage</code>)</li>
+        <li>Configuration scope flags for init command (<code>--local</code>, <code>--global</code>, <code>--system</code>, <code>--file</code>)</li>
+        <li><code>--force</code> option for init command to allow reconfiguration</li>
+        <li>Remote sync check before finish to ensure local branch is up-to-date with remote</li>
       </ul>
 
       <h3>Changed</h3>
       <ul>
-        <li>Finish command now fetches from remote by default before merging</li>
-        <li>Promoted to stable 1.0 release</li>
+        <li>Default fetch behavior changed to <code>true</code> for finish command</li>
+      </ul>
+
+      <h3>Fixed</h3>
+      <ul>
+        <li>Hooks now receive correct positional arguments</li>
       </ul>
 
       <h2 id="030---2026-01-14">[0.3.0] - 2026-01-14</h2>
@@ -108,16 +99,17 @@ const headings = [
       </ul>
 
       <h2 id="010---2025-09-16">[0.1.0] - 2025-09-16</h2>
-      
+
       <h3>Added</h3>
       <ul>
         <li>Initial release of git-flow-next</li>
-        <li>Support for feature, release, hotfix, and support branches</li>
-        <li>Configurable merge strategies (merge, rebase, squash)</li>
-        <li>Three-layer configuration precedence (defaults → git config → CLI flags)</li>
-        <li>State machine for finish command with conflict recovery</li>
-        <li>Automatic child branch updates with <code>autoUpdate</code> configuration</li>
-        <li>Import configuration from git-flow-avh</li>
+        <li>Support for feature, release, hotfix, and support branch workflows</li>
+        <li>Fully customizable base and topic branches with configurable prefixes and relationships</li>
+        <li>Configurable merge strategies: merge, rebase, or squash when finishing branches</li>
+        <li>Flexible configuration via git config or command-line flags</li>
+        <li>Conflict recovery: resolve conflicts and continue where you left off</li>
+        <li>Automatic updates to child branches (e.g., develop syncs from main)</li>
+        <li>Compatibility with existing git-flow-avh repositories</li>
       </ul>
       </div>
     </article>
