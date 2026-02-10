@@ -9,7 +9,7 @@ git-flow-next is a modern reimplementation of the popular git-flow branching mod
 
 ## Our Motivation
 
-This project is proudly maintained by the team behind <a href="https://www.git-tower.com/" target="_blank" rel="noreferrer noopener">Tower</a>, one of the most popular Git clients for Mac and Windows. Having integrated git-flow into Tower over many years, we've gained deep insights into its strengths and areas for improvement.
+This project is proudly maintained by the team behind <a href="https://www.git-tower.com/" target="_blank" rel="noopener">Tower</a>, one of the most popular Git clients for Mac and Windows. Having integrated git-flow into Tower over many years, we've gained deep insights into its strengths and areas for improvement.
 
 As developers of version control tools, we're passionate about creating better developer experiences. While the original git-flow has served the community well, we saw an opportunity to build a more modern implementation that:
 

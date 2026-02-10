@@ -110,7 +110,7 @@ production
 
 ## Tower Integration
 
-git-flow-next integrates seamlessly with <a href="https://www.git-tower.com" target="_blank" rel="noopener noreferrer">Tower</a>, providing a graphical interface for all Git Flow operations. Tower uses the same configuration file as the CLI, ensuring consistency across both interfaces.
+git-flow-next integrates seamlessly with <a href="https://www.git-tower.com" target="_blank" rel="noopener">Tower</a>, providing a graphical interface for all Git Flow operations. Tower uses the same configuration file as the CLI, ensuring consistency across both interfaces.
 
 ## What's Next
 
