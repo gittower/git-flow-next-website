@@ -45,6 +45,28 @@ git flow init --defaults --local
 git flow init --defaults --file=/shared/team-gitflow.config
 ```
 
+## Path Configuration
+
+**gitflow.path.hooks**
+Override the directory where git-flow looks for hook and filter scripts. When set, git-flow uses this directory instead of the default `.git/hooks/` or Git's `core.hooksPath`. Supports absolute paths or paths relative to the repository root.
+
+```bash
+# Absolute path
+git config gitflow.path.hooks /shared/team-hooks
+
+# Relative path (resolved from repository root)
+git config gitflow.path.hooks .githooks
+
+# Global default for all repositories
+git config --global gitflow.path.hooks .githooks
+```
+
+The hooks directory follows a three-level precedence:
+
+1. **gitflow.path.hooks** — git-flow-specific override (recommended)
+2. **core.hooksPath** — Git's native hooks path configuration
+3. **.git/hooks** — Default location
+
 ## The config Command
 
 Manage git-flow configuration for base branches and topic branch types with full CRUD operations.
@@ -257,6 +279,13 @@ git config gitflow.feature.finish.noverify true
 
 # Fetch before finishing (enabled by default)
 git config gitflow.feature.finish.fetch true
+
+# Push options for publish command
+git config gitflow.feature.publish.push-option "ci.skip"
+
+# Multiple push options (use --add for additional values)
+git config gitflow.release.publish.push-option "merge_request.create"
+git config --add gitflow.release.publish.push-option "merge_request.target=main"
 ```
 
 ## Branch Type Configuration Keys
@@ -294,6 +323,9 @@ git config gitflow.<type>.finish.fetch <true|false>
 git config gitflow.<type>.finish.noverify <true|false>
 git config gitflow.<type>.finish.mergemessage <message>
 git config gitflow.<type>.finish.updatemessage <message>
+
+# Publish command overrides
+git config gitflow.<type>.publish.push-option <option>
 ```
 
 ## Hooks and Filters
@@ -417,15 +449,24 @@ Changes in this release:
 ${CHANGELOG}"
 ```
 
+### Hooks Directory
+
+By default, git-flow looks for hook and filter scripts in `.git/hooks/`. This can be overridden using a three-level precedence:
+
+1. **gitflow.path.hooks** — git-flow-specific override (recommended, only affects git-flow hooks)
+2. **core.hooksPath** — Git's native hooks path (also affects Git's own hooks)
+3. **.git/hooks** — Default location
+
 ### Sharing Hooks
 
 Since `.git/hooks/` is not tracked by Git, consider these approaches:
 
 ```bash
-# Store hooks in a tracked directory
+# Recommended: use gitflow.path.hooks (only affects git-flow hooks)
 mkdir .githooks
+git config gitflow.path.hooks .githooks
 
-# Configure Git to use this directory
+# Alternative: use core.hooksPath (also affects Git's own hooks)
 git config core.hooksPath .githooks
 ```
 

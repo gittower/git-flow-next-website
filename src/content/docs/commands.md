@@ -57,7 +57,7 @@ Control where git-flow configuration is stored. Only one scope option may be spe
 - `--release=prefix, -r prefix` - Override release branch prefix (default: release/)
 - `--hotfix=prefix, -x prefix` - Override hotfix branch prefix (default: hotfix/)
 - `--support=prefix, -s prefix` - Override support branch prefix (default: support/)
-- `--tag=prefix, -t prefix` - Override version tag prefix (default: v)
+- `--tag=prefix, -t prefix` - Override version tag prefix (default: none)
 
 **Examples**
 ```bash
@@ -395,9 +395,13 @@ Push a topic branch to the remote repository, making it available for other team
 
 **Usage**
 ```bash
-git-flow <topic> publish [name]
+git-flow <topic> publish [name] [-o option]... [--no-push-option]
 git-flow publish [name]  # shorthand for current branch
 ```
+
+**Options**
+- `-o option, --push-option=option` - Transmit the given string to the server during push. Can be repeated for multiple options. Used by platforms like GitLab, Gitea, and Gerrit for server-side behavior. Config defaults and CLI options are combined additively.
+- `--no-push-option` - Suppress all push options, including configured defaults
 
 **Examples**
 ```bash
@@ -412,6 +416,15 @@ git flow publish
 
 # Publish a release branch
 git flow release publish 1.0.0
+
+# Publish with push option to skip CI
+git flow feature publish my-feature -o ci.skip
+
+# Publish and create a GitLab merge request
+git flow feature publish my-feature -o merge_request.create -o merge_request.target=main
+
+# Publish without any push options (override config defaults)
+git flow feature publish my-feature --no-push-option
 ```
 
 ---
