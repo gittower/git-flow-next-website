@@ -1,6 +1,6 @@
 ---
 title: 'How We Shipped git-flow-next 1.0 Almost Entirely with AI'
-pubDate: 2026-05-28
+pubDate: 2026-06-09
 description: 'The honest 13-month journey of building git-flow-next with AI — what worked, what failed, and why the guidelines turned out to be the real product.'
 author: 'Alexander Rinass'
 ---
@@ -16,10 +16,17 @@ First, here are some numbers:
 - 8 guideline documents
 - Approximately 392 commits
 - Approximately 29,000 lines of Go code
- 
-Most of the code was written by AI. While I am an experienced developer with a background in Test-Driven Development (TDD), I am not yet proficient in Go. Therefore, I provided the architecture, specifications, and guidance; the AI was the hands on the keyboard.
 
-If you're in a hurry and are just looking for the tl;dr, here is the one lesson I'd carry to the next project: **AI development isn't "telling AI what to build." It's "building the system that tells AI what to build."**
+We did all of this on the side, alongside our regular work — which is worth keeping in mind before reading too much into the timeline.
+
+Most of the code was written by AI. While we're experienced developers, we're not proficient in Go. So we provided the architecture, specifications, and guidance; the AI was the hands on the keyboard.
+
+Two things motivated the project:
+
+- We wanted an open-source tool that would need little ongoing maintenance from us.
+- We wanted to experiment with something that's more or less a black box to us — we're not familiar with the tech stack — to see how building with AI holds up under those conditions, both for us specifically and as a more general question.
+
+If you're in a hurry and are just looking for the tl;dr, here is the one lesson we'd carry to the next project: **AI development isn't "telling AI what to build." It's "building the system that tells AI what and how to build."**
 
 The code is the output. The guidelines, skills, review criteria, and architectural docs are the actual product.
 
@@ -27,7 +34,7 @@ This is how we got there.
 
 ## Phase 1: Vibe Coding with Cursor (March 2025)
 
-The first phase was all about getting my feet wet: minimal instructions, all in one file, just to explore what AI could accomplish.
+The first phase was all about getting our feet wet: minimal instructions, all in one file, just to explore what AI could accomplish.
 
 The pace was remarkable. In about two weeks, Cursor produced all of git-flow-next's core commands — `start`, `finish`, `list`, `overview`, `update`, `delete`, `rename`, `checkout` — at roughly one new command every day or two.
 
@@ -35,17 +42,17 @@ The pace was also misleading.
 
 Up close, the project wasn't really a project. It was a collection of individually-generated files that happened to share a directory. There was no clear separation between the CLI layer, business logic, and Git operations — every command did things its own way. Patterns were duplicated across files in slightly different shapes, often subtly enough that asking AI to find duplicates would surface one and quietly miss the others. Git configuration was loaded on every operation instead of once at startup — performance regressions by design, not by accident.
 
-I tried to refactor my way out of it. With Cursor, with Claude, with detailed instructions. It didn't work. Functions were duplicated, code didn't compile, proposed refactorings were over-engineered with the wrong abstractions. 
+We tried to refactor our way out of it. With Cursor, with Claude, with detailed instructions. It didn't work. Functions were duplicated, code didn't compile, proposed refactorings were over-engineered with the wrong abstractions. 
 
-I even tried full rewrites from scratch. Those failed, too.
+We even tried full rewrites from scratch. Those failed, too.
 
-What eventually worked was the opposite of speed: tiny incremental steps. Create empty command files first. Add one piece of logic. Run the tests. Move on. And more importantly, I realized I had to define a development philosophy myself — explicitly, in writing — before AI could help me clean anything up. 
+What eventually worked was the opposite of speed: tiny incremental steps. Create empty command files first. Add one piece of logic. Run the tests. Move on. And more importantly, we realized we had to define a development philosophy ourselves — explicitly, in writing — before AI could help us clean anything up. 
 
-You can't evaluate an AI's proposal if you don't already know what you want. That was the first time I understood the shape of the real problem.
+You can't evaluate an AI's proposal if you don't already know what you want. That was the first time we understood the shape of the real problem.
 
 ## Phase 2: Building the System (May–August 2025)
 
-On day one with Claude Code, I let it analyze the project and write a `CLAUDE.md` file. It got some things wrong — inconsistent config keys, for one — but accuracy wasn't really the point. 
+On day one with Claude Code, we let it analyze the project and write a `CLAUDE.md` file. It got some things wrong — inconsistent config keys, for one — but accuracy wasn't really the point. 
 
 The point was to give AI a place to start understanding the project before writing code.
 
@@ -73,11 +80,11 @@ The architectural rules that mattered most were the ones AI kept violating:
 - Configuration precedence: branch type defaults → git config → CLI flags
 - Custom error types with specific exit codes and contextual messages
 
-A few anecdotes from this period stick with me:
+A few anecdotes from this period stick with us:
 
-- I asked AI to create a config resolver. Despite the guideline saying load config once and pass it through, it called a Git command for every individual option. After I corrected that, it created a duplicate `TagOptions` struct, then left a helper function in the wrong file. Each session introduced a new variant of the same problem.
-- I once asked both Opus and Sonnet to detect the same bug. Only Opus found it.
-- A recurring failure mode: commands not executed in the right directory. I'd fix it once, and it would crop up again later in different code.
+- We asked AI to create a config resolver. Despite the guideline saying load config once and pass it through, it called a Git command for every individual option. After we corrected that, it created a duplicate `TagOptions` struct, then left a helper function in the wrong file. Each session introduced a new variant of the same problem.
+- We once asked both Opus and Sonnet to detect the same bug. Only Opus found it.
+- A recurring failure mode: commands not executed in the right directory. We'd fix it once, and it would crop up again later in different code.
 - Sonnet 3.7, when it came out, worked *worse* than its predecessor on this codebase. Model upgrades aren't strictly monotonic.
 
 None of those are individually surprising. **The pattern they form is: AI doesn't learn within a session, and it certainly doesn't learn across sessions. "Learning" is documentation engineering.**
@@ -92,7 +99,7 @@ Here's the part that's easy to miss: guidelines compound. **Every guideline you 
 
 The November model updates were the second turning point, and not quite for the reason you'd expect. The models didn't necessarily get much better at *producing* code. They got dramatically better at *understanding existing code* and at agentic behavior — exploring a codebase, finding relevant context, connecting pieces across files.
 
-For a project with accumulated guidelines, this mattered enormously. The agent could now actually read and internalize the conventions before writing code, rather than generating in the dark. Thinking models like Opus were much better at breaking down complex tasks. The work I'd done building the system started paying out at a different scale.
+For a project with accumulated guidelines, this mattered enormously. The agent could now actually read and internalize the conventions before writing code, rather than generating in the dark. Thinking models like Opus were much better at breaking down complex tasks. The work we'd done building the system started paying out at a different scale.
 
 A lot of the friction from early 2025 — refactors that needed multiple attempts, tests that wouldn't run — would probably work first try today. Some of the difficulty back then was real complexity. Some of it was just that the models weren't quite there yet.
 
@@ -153,7 +160,7 @@ We shipped `v1.1.0` in April with those refinements.
 
 For a typical feature or fix, the workflow is:
 
-1. An issue gets created on GitHub (sometimes by AI, from my notes).
+1. An issue gets created on GitHub (sometimes by AI, from our notes).
 2. `/resolve-issue 42` kicks off the pipeline.
 3. A subagent analyzes the issue, explores the codebase, writes notes to `.ai/`.
 4. Another creates a feature branch — using git-flow-next itself.
@@ -161,33 +168,31 @@ For a typical feature or fix, the workflow is:
 6. Another implements, runs tests, and commits per guidelines.
 7. A PR is opened with a structured summary.
 8. Automated review checks the changes against the project guidelines.
-9. I review the result and leave comments if needed.
+9. We review the result and leave comments if needed.
 10. `/address-review` triages and fixes valid comments.
 
-Most of my time goes into maintaining the guidelines and reviewing the output — not writing code.
+Most of our time goes into maintaining the guidelines and reviewing the output — not writing code.
 
 ## What the Role Actually Became
 
-As mentioned in the intro, I came at this from a TDD background, where the code is already a kind of black box: you define the spec, you define the tests that verify the behavior, you make the tests pass. 
-
-I found that **AI-driven development is the same loop with a different actor making the tests pass.**
+AI-driven development settles into a familiar loop: you define the spec, you define the tests that verify the behavior, and **a different actor makes the tests pass.**
 
 The practical shift, then, isn't really about not writing code. It's about where you spend your attention:
 
 - Defining the spec
 - Reviewing the plan before any implementation begins
-- Iterating on the plan until I get the feeling that the model "gets" it
+- Iterating on the plan until we get the feeling that the model "gets" it
 - Reviewing the result
 - Updating the guidelines when something goes wrong in a way that will repeat
 
-For complex areas — the `finish` command's state machine, the merge state system — I stay close to the planning, review every proposal carefully, and make judgment calls the model can't. The more complex the area, the tighter the involvement. That hasn't gone away, and probably won't.
+For complex areas — the `finish` command's state machine, the merge state system — we stay close to the planning, review every proposal carefully, and make judgment calls the model can't. The more complex the area, the tighter the involvement. That hasn't gone away, and probably won't.
 
 ## What's Still Hard
 
-I want to be honest about the parts that aren't solved:
+We want to be honest about the parts that aren't solved:
 
-- **Complex areas still need humans.** The 1,000-line state machine in `finish` is a good example. AI couldn't hold the full mental model — each session would nail one aspect while subtly breaking another.
-- **Cross-session amnesia.** AI doesn't remember across sessions, and it often forgets within a single conversation. Everything load-bearing has to live in a file.
+- **Complex areas still need humans.** The 1,000-line state machine in `finish` is a good example. The model *can* hold the full mental model — but only if a human understands it well enough to describe it correctly in the first place. Get the description wrong and each session will nail one aspect while subtly breaking another.
+- **Maintaining knowledge efficiently.** That AI forgets across sessions is a given every developer knows going in. The hard part is carrying knowledge forward *efficiently*: dozens of markdown files will happily fill the context window, often with information irrelevant to the task at hand. The real challenge is surfacing the right context at the right moment, not just writing everything down.
 - **Architecture decisions need humans.** AI implements patterns. It doesn't decide which patterns to use. It once flagged an intentional design decision as a bug during a review.
 - **Sometimes it's just faster to do it yourself.** AI occasionally fails at trivially simple things that would take you 30 seconds.
 - **AI review is not a verdict.** Three runs, three different results. It's a useful signal, but you can't outsource judgment to it.
