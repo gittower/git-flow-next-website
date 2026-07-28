@@ -1,0 +1,294 @@
+---
+/**
+ * Animated synthwave hero background (sun, horizon glow, perspective grid,
+ * twinkling stars) — pure CSS/SVG, zero JavaScript, zero dependencies.
+ * Renders as an absolutely-positioned layer filling its (position: relative) parent.
+ */
+---
+
+<div class="hero-bg-css" aria-hidden="true">
+  <!-- Sky + sun (clipped above the horizon) -->
+  <div class="sky">
+    <div class="stars stars-a"></div>
+    <div class="stars stars-b"></div>
+    <div class="sparkle sparkle-1"></div>
+    <div class="sparkle sparkle-2"></div>
+    <div class="sparkle sparkle-3"></div>
+    <div class="shooting-star"></div>
+    <div class="sun"></div>
+  </div>
+
+  <!-- Glowing horizon line with a light sweep -->
+  <div class="horizon"></div>
+
+  <!-- Perspective grid floor -->
+  <div class="grid-viewport">
+    <div class="grid-plane"></div>
+  </div>
+
+  <!-- Dark vignette so hero content stays readable -->
+  <div class="vignette"></div>
+</div>
+
+<style>
+  .hero-bg-css {
+    --horizon: 42%;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: linear-gradient(to bottom, #0d0921 0%, #1a0f3c 34%, #0d0921 100%);
+  }
+
+  /* ---------- Sky ---------- */
+  .sky {
+    position: absolute;
+    inset: 0 0 calc(100% - var(--horizon)) 0;
+    overflow: hidden;
+  }
+
+  /* ---------- Sun ---------- */
+  .sun {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: min(78vmin, 720px);
+    aspect-ratio: 1;
+    transform: translate(-50%, 50%);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 42%,
+        #ff3d6e 0%,
+        #ff2d55 42%,
+        #f72585 68%,
+        #ff5a3c 88%,
+        #ff1e1e 100%);
+    box-shadow:
+      0 0 60px 10px rgba(255, 30, 120, 0.45),
+      0 0 160px 40px rgba(181, 24, 181, 0.35),
+      0 0 300px 90px rgba(120, 20, 200, 0.25);
+    animation: sun-breathe 5s ease-in-out infinite;
+  }
+  /* Animated scanline shimmer drifting up the sun */
+  .sun::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-linear-gradient(to top,
+      rgba(13, 9, 33, 0) 0px,
+      rgba(13, 9, 33, 0) 14px,
+      rgba(13, 9, 33, 0.35) 16px,
+      rgba(13, 9, 33, 0) 18px);
+    animation: sun-scan 7s linear infinite;
+  }
+  @keyframes sun-breathe {
+    0%, 100% {
+      box-shadow:
+        0 0 60px 10px rgba(255, 30, 120, 0.45),
+        0 0 160px 40px rgba(181, 24, 181, 0.35),
+        0 0 300px 90px rgba(120, 20, 200, 0.25);
+    }
+    50% {
+      box-shadow:
+        0 0 80px 16px rgba(255, 30, 120, 0.62),
+        0 0 200px 56px rgba(181, 24, 181, 0.48),
+        0 0 340px 110px rgba(120, 20, 200, 0.34);
+    }
+  }
+  @keyframes sun-scan {
+    from { background-position-y: 0; }
+    to   { background-position-y: -180px; }
+  }
+
+  /* ---------- Stars (two layers twinkling out of phase) ---------- */
+  .stars {
+    position: absolute;
+    inset: 0;
+    background-repeat: repeat;
+  }
+  .stars-a {
+    background-image:
+      radial-gradient(1.6px circle at 8% 22%, #ffffff 60%, transparent 62%),
+      radial-gradient(1.2px circle at 18% 64%, #cdd7ff 60%, transparent 62%),
+      radial-gradient(2px   circle at 27% 12%, #ffffff 60%, transparent 62%),
+      radial-gradient(1.2px circle at 38% 40%, #b27bff 60%, transparent 62%),
+      radial-gradient(1.6px circle at 47% 8%,  #ffffff 60%, transparent 62%),
+      radial-gradient(1.2px circle at 58% 30%, #cdd7ff 60%, transparent 62%),
+      radial-gradient(2.4px circle at 66% 14%, #b27bff 60%, transparent 62%),
+      radial-gradient(1.2px circle at 74% 52%, #ffffff 60%, transparent 62%),
+      radial-gradient(1.6px circle at 84% 20%, #cdd7ff 60%, transparent 62%),
+      radial-gradient(1.2px circle at 93% 46%, #ffffff 60%, transparent 62%);
+    animation: twinkle 3.4s ease-in-out infinite;
+  }
+  .stars-b {
+    background-image:
+      radial-gradient(1.2px circle at 5% 55%,  #cdd7ff 60%, transparent 62%),
+      radial-gradient(2.2px circle at 14% 8%,  #b27bff 60%, transparent 62%),
+      radial-gradient(1.2px circle at 23% 38%, #ffffff 60%, transparent 62%),
+      radial-gradient(1.6px circle at 34% 70%, #cdd7ff 60%, transparent 62%),
+      radial-gradient(1.2px circle at 52% 18%, #ffffff 60%, transparent 62%),
+      radial-gradient(1.8px circle at 61% 58%, #b27bff 60%, transparent 62%),
+      radial-gradient(1.2px circle at 71% 6%,  #ffffff 60%, transparent 62%),
+      radial-gradient(2px   circle at 80% 34%, #cdd7ff 60%, transparent 62%),
+      radial-gradient(1.2px circle at 89% 66%, #ffffff 60%, transparent 62%),
+      radial-gradient(1.6px circle at 97% 12%, #b27bff 60%, transparent 62%);
+    animation: twinkle 4.6s ease-in-out infinite 1.2s;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.25; }
+  }
+
+  /* ---------- Diamond sparkles ---------- */
+  .sparkle {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: radial-gradient(circle, #ffffff 0%, rgba(178, 123, 255, 0.9) 35%, transparent 72%);
+    clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
+    animation: sparkle-pulse 3s ease-in-out infinite;
+  }
+  .sparkle-1 { top: 12%; left: 15%; }
+  .sparkle-2 { top: 8%;  right: 18%; animation-delay: 1s; width: 28px; height: 28px; }
+  .sparkle-3 { top: 42%; right: 8%;  animation-delay: 2s; width: 16px; height: 16px; }
+  @keyframes sparkle-pulse {
+    0%, 100% { transform: scale(0.4); opacity: 0.3; }
+    50%      { transform: scale(1);   opacity: 1; }
+  }
+
+  /* ---------- Occasional shooting star ---------- */
+  .shooting-star {
+    position: absolute;
+    top: 14%;
+    left: -10%;
+    width: 140px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(to right, transparent, #cfe0ff 70%, #ffffff);
+    opacity: 0;
+    animation: shoot 9s linear infinite 3s;
+  }
+  @keyframes shoot {
+    0%   { transform: translate(0, 0) rotate(12deg);        opacity: 0; }
+    3%   { opacity: 1; }
+    10%  { transform: translate(65vw, 9vh) rotate(12deg);   opacity: 0; }
+    100% { transform: translate(65vw, 9vh) rotate(12deg);   opacity: 0; }
+  }
+
+  /* ---------- Horizon ---------- */
+  .horizon {
+    position: absolute;
+    top: var(--horizon);
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right,
+      transparent 0%,
+      #4d6bff 18%,
+      #8b2bff 42%,
+      #ff39b9 50%,
+      #8b2bff 58%,
+      #4d6bff 82%,
+      transparent 100%);
+    box-shadow:
+      0 0 12px 2px rgba(139, 43, 255, 0.8),
+      0 0 42px 8px rgba(255, 57, 185, 0.45);
+    animation: horizon-pulse 4s ease-in-out infinite;
+  }
+  /* Light sweeping across the horizon line */
+  .horizon::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 22%;
+    height: 5px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.95), transparent);
+    filter: blur(1px);
+    animation: horizon-sweep 5.5s ease-in-out infinite;
+  }
+  @keyframes horizon-pulse {
+    0%, 100% {
+      box-shadow:
+        0 0 12px 2px rgba(139, 43, 255, 0.8),
+        0 0 42px 8px rgba(255, 57, 185, 0.45);
+    }
+    50% {
+      box-shadow:
+        0 0 18px 4px rgba(139, 43, 255, 1),
+        0 0 60px 14px rgba(255, 57, 185, 0.65);
+    }
+  }
+  @keyframes horizon-sweep {
+    0%        { transform: translateX(-30vw); opacity: 0; }
+    12%       { opacity: 1; }
+    55%, 100% { transform: translateX(110vw); opacity: 0; }
+  }
+
+  /* ---------- Grid floor ---------- */
+  .grid-viewport {
+    position: absolute;
+    top: var(--horizon);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    perspective: 800px;
+    overflow: hidden;
+  }
+  .grid-plane {
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 220%;
+    height: 160%;
+    transform-origin: top center;
+    transform: rotateX(55deg);
+    background-image:
+      repeating-linear-gradient(to right,
+        rgba(118, 142, 255, 0.9) 0px, rgba(118, 142, 255, 0.9) 2px, transparent 2px, transparent 90px),
+      repeating-linear-gradient(to bottom,
+        rgba(160, 114, 255, 0.9) 0px, rgba(160, 114, 255, 0.9) 2px, transparent 2px, transparent 64px);
+    mask-image:
+      linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
+    animation: grid-drive 1.6s linear infinite;
+  }
+  /* Neon sheen flowing over the grid */
+  .grid-plane::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(255, 57, 185, 0.22) 46%,
+      transparent 60%);
+    animation: grid-sheen 3.2s linear infinite;
+  }
+  @keyframes grid-drive {
+    from { background-position-y: 0, 0; }
+    to   { background-position-y: 0, 64px; }
+  }
+  @keyframes grid-sheen {
+    from { transform: translateY(-30%); opacity: 0; }
+    25%  { opacity: 1; }
+    to   { transform: translateY(170%); opacity: 0; }
+  }
+
+  /* ---------- Vignette for content readability ---------- */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 56% 42% at 50% 72%, rgba(13, 9, 33, 0.95) 0%, rgba(13, 9, 33, 0.62) 55%, transparent 80%),
+      linear-gradient(to bottom, transparent 66%, rgba(13, 9, 33, 0.7) 92%, #0d0921 100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg-css *,
+    .hero-bg-css *::after {
+      animation: none !important;
+    }
+  }
+</style>

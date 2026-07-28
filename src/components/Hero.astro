@@ -1,21 +1,11 @@
 ---
-import { Image, getImage } from 'astro:assets';
-import heroBg from '../assets/hero-bg.png';
 import gitFlowVideo from '../assets/git-flow-hero.mp4';
-
-const optimizedHeroBgWebP = await getImage({
-  src: heroBg,
-  format: 'webp',
-  quality: 80
-});
-
-const optimizedHeroBgJpg = await getImage({
-  src: heroBg,
-  format: 'png'
-});
+import HeroBg from './HeroBg.astro';
 ---
 
-<section data-webp-bg={optimizedHeroBgWebP.src} data-fallback-bg={optimizedHeroBgJpg.src}>
+<section>
+  <HeroBg />
+  <div class="hero-content">
   <h1>Your favorite Git workflow.<br/>Reimagined.</h1>
   <div class="hero-video">
     <video
@@ -57,6 +47,7 @@ const optimizedHeroBgJpg = await getImage({
   <div class="other-options">
     <a href="/docs/installation">Other installation options</a>
   </div>
+  </div>
 </section>
 
 <style>
@@ -66,16 +57,12 @@ const optimizedHeroBgJpg = await getImage({
     @media (min-width: 768px) {
       padding-top: 7rem;
     }
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    position: relative;
     width: 100%;
-    background-image: var(--fallback-bg);
   }
-  @supports (background-image: url('.webp')) {
-    section {
-      background-image: var(--webp-bg);
-    }
+  .hero-content {
+    position: relative;
+    z-index: 1;
   }
   h1 {
     font-weight: 700;
@@ -192,13 +179,6 @@ const optimizedHeroBgJpg = await getImage({
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Set the background images from data attributes
-    const section = document.querySelector('section');
-    if (section) {
-      section.style.setProperty('--webp-bg', `url(${section.dataset.webpBg})`);
-      section.style.setProperty('--fallback-bg', `url(${section.dataset.fallbackBg})`);
-    }
-
     // Copy installation instructions to clipboard
     const commandWrapper = document.querySelector('.command-wrapper');
     const command = document.getElementById('command');
