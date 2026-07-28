@@ -53,6 +53,7 @@
     left: 50%;
     bottom: 0;
     border-radius: 50%;
+    overflow: hidden;
     transform: translate(-50%, 50%);
     width: min(78vmin, 720px);
     aspect-ratio: 1;
@@ -79,18 +80,18 @@
   .sun::after {
     content: "";
     position: absolute;
-    inset: 0;
-    border-radius: 50%;
+    inset: -18px 0;
     background: repeating-linear-gradient(to top,
       rgba(13, 9, 33, 0) 0px,
       rgba(13, 9, 33, 0) 14px,
       rgba(13, 9, 33, 0.14) 16px,
       rgba(13, 9, 33, 0) 18px);
     animation: sun-scan 3.6s linear infinite;
+    will-change: transform;
   }
   @keyframes sun-scan {
-    from { background-position-y: 0; }
-    to   { background-position-y: -18px; }
+    from { transform: translateY(0); }
+    to   { transform: translateY(-18px); }
   }
 
   /* ---------- Stars (two layers twinkling out of phase) ---------- */
@@ -186,7 +187,18 @@
     box-shadow:
       0 0 12px 2px rgba(139, 43, 255, 0.8),
       0 0 42px 8px rgba(255, 57, 185, 0.45);
+  }
+  /* Pre-rendered glow layer; opacity avoids repainting the shadow each frame */
+  .horizon::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow:
+      0 0 18px 4px rgba(139, 43, 255, 0.8),
+      0 0 60px 14px rgba(255, 57, 185, 0.36);
+    opacity: 0;
     animation: horizon-pulse 6.5s ease-in-out infinite;
+    will-change: opacity;
   }
   /* Light sweeping across the horizon line */
   .horizon::after {
@@ -201,16 +213,8 @@
     animation: horizon-sweep 5.5s ease-in-out infinite;
   }
   @keyframes horizon-pulse {
-    0%, 100% {
-      box-shadow:
-        0 0 12px 2px rgba(139, 43, 255, 0.8),
-        0 0 42px 8px rgba(255, 57, 185, 0.45);
-    }
-    50% {
-      box-shadow:
-        0 0 18px 4px rgba(139, 43, 255, 1),
-        0 0 60px 14px rgba(255, 57, 185, 0.65);
-    }
+    0%, 100% { opacity: 0; }
+    50%      { opacity: 1; }
   }
   @keyframes horizon-sweep {
     0%        { transform: translateX(-30vw); opacity: 0; }
@@ -236,16 +240,23 @@
     height: 160%;
     transform-origin: top center;
     transform: rotateX(55deg);
+    mask-image:
+      linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
+  }
+  /* Move the painted grid as a compositor layer instead of repainting its background */
+  .grid-plane::before {
+    content: "";
+    position: absolute;
+    inset: -64px 0 0;
     background-image:
       repeating-linear-gradient(to right,
         rgba(118, 142, 255, 0.9) 0px, rgba(118, 142, 255, 0.9) 2px, transparent 2px, transparent 90px),
       repeating-linear-gradient(to bottom,
         rgba(160, 114, 255, 0.9) 0px, rgba(160, 114, 255, 0.9) 2px, transparent 2px, transparent 64px);
-    mask-image:
-      linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
-    -webkit-mask-image:
-      linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
     animation: grid-drive 3.2s linear infinite;
+    will-change: transform;
   }
   /* Neon sheen flowing over the grid */
   .grid-plane::after {
@@ -259,8 +270,8 @@
     animation: grid-sheen 6.5s linear infinite;
   }
   @keyframes grid-drive {
-    from { background-position-y: 0, 0; }
-    to   { background-position-y: 0, 64px; }
+    from { transform: translateY(0); }
+    to   { transform: translateY(64px); }
   }
   @keyframes grid-sheen {
     from { transform: translateY(-30%); opacity: 0; }
@@ -279,6 +290,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .hero-bg-css *,
+    .hero-bg-css *::before,
     .hero-bg-css *::after {
       animation: none !important;
     }
