@@ -1,6 +1,6 @@
 ---
 export interface PostPreview {
-  slug: string;
+  href: string;
   data: {
     title: string;
   };
@@ -18,7 +18,7 @@ if (!prevPost && !nextPost) return null;
 
 <nav class="post-navigation" aria-label="Post navigation">
     {prevPost ? (
-    <a href={`${prevPost.slug}`} rel="prev" class="nav-card">
+    <a href={prevPost.href} rel="prev" class="nav-card">
       <div class="nav-direction">Previous</div>
       <div class="post-title">&lsaquo; {prevPost.data.title}</div>
     </a>
@@ -27,7 +27,7 @@ if (!prevPost && !nextPost) return null;
     )}
 
     {nextPost ? (
-      <a href={`${nextPost.slug}`} rel="next" class="nav-card">
+      <a href={nextPost.href} rel="next" class="nav-card">
         <div class="nav-direction">Next</div>
         <div class="post-title">{nextPost.data.title} &rsaquo;</div>
       </a>

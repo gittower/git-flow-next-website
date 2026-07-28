@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 
 // Generate all paths at build time
@@ -15,18 +15,24 @@ export async function getStaticPaths() {
   });
 
   return sortedDocs.map((doc, index) => {
-    const nextDoc = sortedDocs[index + 1] ? { ...sortedDocs[index + 1], slug: `/docs/${sortedDocs[index + 1].slug}` } : null;
-    const prevDoc = sortedDocs[index - 1] ? { ...sortedDocs[index - 1], slug: `/docs/${sortedDocs[index - 1].slug}` } : null;
+    const nextDoc = sortedDocs[index + 1] ? {
+      href: `/docs/${sortedDocs[index + 1].id}`,
+      data: { title: sortedDocs[index + 1].data.title },
+    } : null;
+    const prevDoc = sortedDocs[index - 1] ? {
+      href: `/docs/${sortedDocs[index - 1].id}`,
+      data: { title: sortedDocs[index - 1].data.title },
+    } : null;
 
     return {
-      params: { slug: doc.slug },
+      params: { slug: doc.id },
       props: { doc, nextDoc, prevDoc },
     };
   });
 }
 
 const { doc, nextDoc, prevDoc } = Astro.props;
-const { Content, headings } = await doc.render();
+const { Content, headings } = await render(doc);
 
 // Extract headings for table of contents
 const h2Headings = headings

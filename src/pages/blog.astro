@@ -13,7 +13,7 @@ posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
     <ul class="blog-archive">
     {posts.map(post => (
       <li>
-        <a href={`/blog/posts/${post.slug}`}>
+        <a href={`/blog/posts/${post.id}`}>
           {post.data.title}
         </a>
         <time datetime={post.data.pubDate.toISOString()}>

@@ -19,7 +19,7 @@ const sortedDocs = publishedDocs.sort((a, b) => {
     <ul class="docs-archive">
       {sortedDocs.map(doc => (
         <li>
-          <a href={`/docs/${doc.slug}`}>{doc.data.title}</a>
+          <a href={`/docs/${doc.id}`}>{doc.data.title}</a>
           <p class="doc-description">{doc.data.description}</p>
         </li>
       ))}

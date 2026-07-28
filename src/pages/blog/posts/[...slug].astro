@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BlogLayout from '../../../layouts/BlogLayout.astro';
 
 export async function getStaticPaths() {
@@ -11,24 +11,24 @@ export async function getStaticPaths() {
 
   return sortedEntries.map((entry, index) => {
     const nextPost = sortedEntries[index + 1] ? {
-      ...sortedEntries[index + 1],
-      slug: `/blog/posts/${sortedEntries[index + 1].slug}`
+      href: `/blog/posts/${sortedEntries[index + 1].id}`,
+      data: { title: sortedEntries[index + 1].data.title },
     } : null;
 
     const prevPost = sortedEntries[index - 1] ? {
-      ...sortedEntries[index - 1],
-      slug: `/blog/posts/${sortedEntries[index - 1].slug}`
+      href: `/blog/posts/${sortedEntries[index - 1].id}`,
+      data: { title: sortedEntries[index - 1].data.title },
     } : null;
 
     return {
-      params: { slug: entry.slug },
+      params: { slug: entry.id },
       props: { entry, nextPost, prevPost },
     };
   });
 }
 
 const { entry, nextPost, prevPost } = Astro.props;
-const { Content, headings } = await entry.render();
+const { Content, headings } = await render(entry);
 
 const formattedDate = new Date(entry.data.pubDate).toLocaleDateString('en-US', {
   year: 'numeric',

@@ -2,6 +2,9 @@
   "name": "git-flow-next",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -9,9 +12,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.6.0",
-    "@fontsource/inria-sans": "^5.2.5",
-    "astro": "^5.14.3",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.1.4",
     "astro-analytics": "^2.7.0"
   }
 }
