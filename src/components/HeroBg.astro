@@ -52,11 +52,17 @@
     position: absolute;
     left: 50%;
     bottom: 0;
+    border-radius: 50%;
+    transform: translate(-50%, 50%);
     width: min(78vmin, 720px);
     aspect-ratio: 1;
-    transform: translate(-50%, 50%);
-    border-radius: 50%;
     background:
+      radial-gradient(circle at 50% 16%,
+        rgba(255, 255, 255, 0.14) 0%,
+        transparent 38%),
+      linear-gradient(to bottom,
+        transparent 20%,
+        rgba(13, 9, 33, 0.16) 100%),
       radial-gradient(circle at 50% 42%,
         #ff3d6e 0%,
         #ff2d55 42%,
@@ -64,10 +70,10 @@
         #ff5a3c 88%,
         #ff1e1e 100%);
     box-shadow:
-      0 0 60px 10px rgba(255, 30, 120, 0.45),
-      0 0 160px 40px rgba(181, 24, 181, 0.35),
-      0 0 300px 90px rgba(120, 20, 200, 0.25);
-    animation: sun-breathe 5s ease-in-out infinite;
+      0 0 0 1px rgba(255, 132, 174, 0.2),
+      0 0 48px 10px rgba(255, 30, 120, 0.36),
+      0 0 110px 28px rgba(181, 24, 181, 0.18),
+      0 0 200px 50px rgba(120, 20, 200, 0.1);
   }
   /* Animated scanline shimmer drifting up the sun */
   .sun::after {
@@ -80,25 +86,11 @@
       rgba(13, 9, 33, 0) 14px,
       rgba(13, 9, 33, 0.14) 16px,
       rgba(13, 9, 33, 0) 18px);
-    animation: sun-scan 7s linear infinite;
-  }
-  @keyframes sun-breathe {
-    0%, 100% {
-      box-shadow:
-        0 0 60px 10px rgba(255, 30, 120, 0.45),
-        0 0 160px 40px rgba(181, 24, 181, 0.35),
-        0 0 300px 90px rgba(120, 20, 200, 0.25);
-    }
-    50% {
-      box-shadow:
-        0 0 80px 16px rgba(255, 30, 120, 0.62),
-        0 0 200px 56px rgba(181, 24, 181, 0.48),
-        0 0 340px 110px rgba(120, 20, 200, 0.34);
-    }
+    animation: sun-scan 3.6s linear infinite;
   }
   @keyframes sun-scan {
     from { background-position-y: 0; }
-    to   { background-position-y: -180px; }
+    to   { background-position-y: -18px; }
   }
 
   /* ---------- Stars (two layers twinkling out of phase) ---------- */
@@ -119,7 +111,7 @@
       radial-gradient(1.2px circle at 74% 52%, #ffffff 60%, transparent 62%),
       radial-gradient(1.6px circle at 84% 20%, #cdd7ff 60%, transparent 62%),
       radial-gradient(1.2px circle at 93% 46%, #ffffff 60%, transparent 62%);
-    animation: twinkle 3.4s ease-in-out infinite;
+    animation: twinkle 5.5s ease-in-out infinite;
   }
   .stars-b {
     background-image:
@@ -133,7 +125,7 @@
       radial-gradient(2px   circle at 80% 34%, #cdd7ff 60%, transparent 62%),
       radial-gradient(1.2px circle at 89% 66%, #ffffff 60%, transparent 62%),
       radial-gradient(1.6px circle at 97% 12%, #b27bff 60%, transparent 62%);
-    animation: twinkle 4.6s ease-in-out infinite 1.2s;
+    animation: twinkle 7.2s ease-in-out infinite 1.2s;
   }
   @keyframes twinkle {
     0%, 100% { opacity: 1; }
@@ -147,7 +139,7 @@
     height: 22px;
     background: radial-gradient(circle, #ffffff 0%, rgba(178, 123, 255, 0.9) 35%, transparent 72%);
     clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
-    animation: sparkle-pulse 3s ease-in-out infinite;
+    animation: sparkle-pulse 5s ease-in-out infinite;
   }
   .sparkle-1 { top: 12%; left: 15%; }
   .sparkle-2 { top: 8%;  right: 18%; animation-delay: 1s; width: 28px; height: 28px; }
@@ -194,7 +186,7 @@
     box-shadow:
       0 0 12px 2px rgba(139, 43, 255, 0.8),
       0 0 42px 8px rgba(255, 57, 185, 0.45);
-    animation: horizon-pulse 4s ease-in-out infinite;
+    animation: horizon-pulse 6.5s ease-in-out infinite;
   }
   /* Light sweeping across the horizon line */
   .horizon::after {
@@ -253,7 +245,7 @@
       linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
     -webkit-mask-image:
       linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
-    animation: grid-drive 1.6s linear infinite;
+    animation: grid-drive 3.2s linear infinite;
   }
   /* Neon sheen flowing over the grid */
   .grid-plane::after {
@@ -264,7 +256,7 @@
       transparent 0%,
       rgba(255, 57, 185, 0.22) 46%,
       transparent 60%);
-    animation: grid-sheen 3.2s linear infinite;
+    animation: grid-sheen 6.5s linear infinite;
   }
   @keyframes grid-drive {
     from { background-position-y: 0, 0; }
