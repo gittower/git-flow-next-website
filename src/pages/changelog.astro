@@ -7,6 +7,7 @@ const description = "View the complete changelog for git-flow-next releases.";
 
 // Define headings for table of contents
 const headings = [
+  { slug: '120---2026-08-01', text: '[1.2.0] - 2026-08-01' },
   { slug: '110---2026-04-06', text: '[1.1.0] - 2026-04-06' },
   { slug: '100---2026-02-08', text: '[1.0.0] - 2026-02-08' },
   { slug: '030---2026-01-14', text: '[0.3.0] - 2026-01-14' },
@@ -27,6 +28,39 @@ const headings = [
       <h1>{title}</h1>
 
       <div class="blog-post">
+
+      <h2 id="120---2026-08-01">[1.2.0] - 2026-08-01</h2>
+
+      <h3>Added</h3>
+      <ul>
+        <li><code>git flow integrate</code> command to merge changes from a parent branch into a topic branch, with options resolved from an <code>integrate</code> config namespace</li>
+        <li><code>finish</code> now pushes the finished branches and release tag to the remote after merging, honoring push options</li>
+        <li><code>update --continue</code> and <code>update --abort</code> to resume or cancel an update interrupted by conflicts</li>
+        <li><code>finish</code> now detects and auto-clears stale merge state left by a previous interrupted operation</li>
+        <li><code>delete</code> now fetches and runs a remote sync-check before deleting a branch (<code>--fetch</code>, <code>gitflow.&lt;type&gt;.delete.fetch</code>)</li>
+        <li><code>start</code> can derive the branch name from a configured version filter</li>
+        <li>Windows arm64 build target</li>
+      </ul>
+
+      <h3>Changed</h3>
+      <ul>
+        <li><code>finish</code> now runs a stricter pre-merge sync check: it aborts when the parent (merge-target) branch or the topic branch is behind or has diverged from its remote (with a diverged-specific message), while tolerating either being ahead; <code>--force</code> skips the check</li>
+        <li><code>finish</code> now treats a fetch failure against a reachable-but-failing remote as fatal (was a silent note); the error names the cause and suggests <code>--no-fetch</code> / <code>--force</code></li>
+        <li><code>start</code> now fetches by default before creating a branch (skipped silently when no remote is configured); disable with <code>--no-fetch</code> or <code>gitflow.&lt;type&gt;.start.fetch false</code>. Shares the unified fetch resolution (default → config → flag) with <code>finish</code></li>
+        <li>Commands now refuse to act on merge state owned by a foreign operation and on structurally-incomplete state, returning exit code 3 instead of proceeding destructively</li>
+      </ul>
+
+      <h3>Fixed</h3>
+      <ul>
+        <li><code>init</code> now fails fast when the git user identity is missing</li>
+        <li>Branch names are validated with <code>git check-ref-format</code>, and dots are now allowed in base branch names</li>
+        <li>Branch names are resolved case-insensitively while preserving their original case</li>
+        <li>Leaf commands now reject unexpected positional arguments</li>
+        <li><code>delete</code>, <code>rename</code>, and <code>finish</code> are gated when git-flow is uninitialized</li>
+        <li>Base-branch config cleanup is scoped to local config and treats a missing key as a no-op</li>
+        <li><code>finish --abort</code> is a no-op when no merge is in progress</li>
+        <li>Hooks and filters now run on Windows (executed via <code>sh</code>)</li>
+      </ul>
 
       <h2 id="110---2026-04-06">[1.1.0] - 2026-04-06</h2>
 

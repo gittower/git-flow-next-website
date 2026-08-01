@@ -280,6 +280,19 @@ git config gitflow.feature.finish.noverify true
 # Fetch before finishing (enabled by default)
 git config gitflow.feature.finish.fetch true
 
+# Push the results (branches + tag) to the remote after finishing
+git config gitflow.feature.finish.push true
+
+# Push the tag independently of the branch-push decision
+git config gitflow.release.finish.pushtag true
+
+# Fetch before deleting so remotely-merged branches delete without --force
+git config gitflow.feature.delete.fetch true
+
+# Start no longer needs this to fetch — start fetches by default now.
+# Opt out per branch type instead:
+git config gitflow.feature.start.fetch false
+
 # Push options for publish command
 git config gitflow.feature.publish.push-option "ci.skip"
 
@@ -305,7 +318,7 @@ git config gitflow.branch.<type>.forcedelete <true|false>
 
 ### Command Overrides
 ```bash
-# Start command overrides
+# Start command overrides (start fetches by default; set false to opt out)
 git config gitflow.<type>.start.fetch <true|false>
 
 # Finish command overrides
@@ -318,14 +331,57 @@ git config gitflow.<type>.finish.notag <true|false>
 git config gitflow.<type>.finish.sign <true|false>
 git config gitflow.<type>.finish.signingkey <keyid>
 git config gitflow.<type>.finish.keep <true|false>
+git config gitflow.<type>.finish.keeplocal <true|false>
+git config gitflow.<type>.finish.keepremote <true|false>
 git config gitflow.<type>.finish.force-delete <true|false>
 git config gitflow.<type>.finish.fetch <true|false>
+git config gitflow.<type>.finish.push <true|false>
+git config gitflow.<type>.finish.pushtag <true|false>
 git config gitflow.<type>.finish.noverify <true|false>
 git config gitflow.<type>.finish.mergemessage <message>
 git config gitflow.<type>.finish.updatemessage <message>
 
+# Delete command overrides
+git config gitflow.<type>.delete.fetch <true|false>
+
+# Integrate command overrides (base branches; keyed by base-branch name)
+git config gitflow.<branch>.integrate.tag <true|false>
+git config gitflow.<branch>.integrate.tagname <name>
+git config gitflow.<branch>.integrate.sign <true|false>
+git config gitflow.<branch>.integrate.signingkey <keyid>
+git config gitflow.<branch>.integrate.messagefile <file>
+git config gitflow.<branch>.integrate.rebase <true|false>
+git config gitflow.<branch>.integrate.squash <true|false>
+git config gitflow.<branch>.integrate.no-ff <true|false>
+git config gitflow.<branch>.integrate.mergemessage <message>
+git config gitflow.<branch>.integrate.updatemessage <message>
+git config gitflow.<branch>.integrate.fetch <true|false>
+
 # Publish command overrides
 git config gitflow.<type>.publish.push-option <option>
+```
+
+## Integrate Command Configuration
+
+The `git flow integrate` command merges a **base** branch into its parent. It reads its operational defaults from the `gitflow.<branch>.integrate.*` namespace, keyed by the **base-branch name** (the same identifier used as the `gitflow.branch.<name>.*` subsection). Integrate applies only to base branches.
+
+The available keys mirror the finish command's merge-strategy, tag, message, and fetch options, but two Layer-1 defaults differ:
+
+- **Tagging is off by default.** Base branches have no version from which to derive a tag name, so tagging must be enabled explicitly (via `--tag <name>` or `integrate.tag` + `integrate.tagname`). Enabling tagging without a resolvable name is an error.
+- **Fetching is off by default** (opt-in), unlike finish where fetch defaults on.
+
+The upstream merge strategy resolves through the standard three layers: `gitflow.branch.<name>.upstreamStrategy` (Layer 1), `gitflow.<branch>.integrate.*` (Layer 2), and command-line flags (Layer 3).
+
+```ini
+# Tag main whenever develop is integrated
+[gitflow "develop.integrate"]
+    tag = true
+    tagname = latest
+
+# Rebase a private staging branch onto main and fetch first
+[gitflow "staging.integrate"]
+    rebase = true
+    fetch = true
 ```
 
 ## Hooks and Filters
