@@ -15,6 +15,21 @@ Configuration follows a three-layer precedence system (highest to lowest):
 2. **Command Overrides** (gitflow.*type*.*command*.*) - Override defaults for specific operations
 3. **Branch Type Defaults** (gitflow.branch.*) - Default behavior for branch types
 
+## Boolean Values
+
+Every boolean option accepts the full set of `git-config` boolean spellings:
+
+- **True**: `true`, `yes`, `on`, and any non-zero integer (`1`, `5`, `-1`)
+- **False**: `false`, `no`, `off`, `0`, and an empty value
+
+Matching is case-insensitive, so `Yes`, `ON`, and `True` all work. An unrecognized value (for example `maybe`) is treated as `false` — this differs from `git-config` itself, which reports a "bad boolean" error.
+
+Inverse options such as `no-rebase`, `no-squash`, `notag`, and `ff` are **separate configuration keys**, not falsy spellings of the positive option. Setting `gitflow.feature.finish.rebase = off` does not disable a rebase strategy inherited from the branch type — it merely declines to enable one. To disable it, set the inverse key:
+
+```bash
+git config gitflow.feature.finish.no-rebase true
+```
+
 ## Configuration Scope
 
 git-flow-next follows Git's native configuration scope precedence:
@@ -25,6 +40,7 @@ git-flow-next follows Git's native configuration scope precedence:
 
 The `git flow init` command supports scope options to control where configuration is stored:
 
+- `--shared` - Store in a committable **.gitflow** file at the repository root and copy it into local **.git/config** (see [Shared Configuration](#shared-configuration-gitflow))
 - `--local` - Store in repository's **.git/config** (default)
 - `--global` - Store in user's **~/.gitconfig**
 - `--system` - Store in system-wide **/etc/gitconfig**
@@ -41,8 +57,11 @@ git flow init --defaults --global
 # Override specific settings in a repository
 git flow init --defaults --local
 
-# Shared configuration file
+# External configuration file
 git flow init --defaults --file=/shared/team-gitflow.config
+
+# Committable configuration shared with the team via the repository
+git flow init --defaults --shared
 ```
 
 ## Path Configuration
@@ -66,6 +85,68 @@ The hooks directory follows a three-level precedence:
 1. **gitflow.path.hooks** — git-flow-specific override (recommended)
 2. **core.hooksPath** — Git's native hooks path configuration
 3. **.git/hooks** — Default location
+
+## Shared Configuration (.gitflow)
+
+git-flow can store its configuration in a committable **.gitflow** file at the repository top level so a whole team shares one workflow. The file uses the same `git-config` INI format and the same `gitflow.*` keys as **.git/config**:
+
+```ini
+[gitflow]
+    version = 1.0
+    initialized = true
+[gitflow "branch.main"]
+    type = base
+[gitflow "branch.develop"]
+    type = base
+    parent = main
+    autoUpdate = true
+[gitflow "branch.feature"]
+    type = topic
+    parent = develop
+    prefix = feature/
+```
+
+git-flow never reads **.gitflow** directly during branch operations. Instead it **copies** the shared-managed keys into the clone's local **.git/config**, so every read site sees the shared values and native git precedence (local > global > system) still applies.
+
+**Managing the file**
+
+```bash
+# Author .gitflow and copy it into local config
+git flow init --defaults --shared
+
+# Re-apply .gitflow to local config (overwrite + stale-key removal)
+git flow config sync
+
+# Report drift between local config and .gitflow (exit 6 on drift)
+git flow config status
+
+# Edit .gitflow and re-sync local config
+git flow config edit topic feature --upstream-strategy=rebase --shared
+```
+
+**Shared-managed key set**
+
+A `gitflow.*` key is *shared-managed* — copied between **.gitflow** and local config — unless it is a `gitflow.shared.*` control key, or the per-branch runtime metadata `gitflow.branch.<branch>.base`. `gitflow.version` and `gitflow.initialized` are shared-managed. Keys outside the `gitflow.*` namespace are never copied, even if present in **.gitflow**. Copying preserves multi-value keys (such as `gitflow.<type>.publish.push-option`) and their order.
+
+**Control keys**
+
+These are read from local/global/system config, never from **.gitflow**, and are never copied:
+
+**gitflow.shared.autoInit**
+When `true`, a fresh clone activates a present, valid **.gitflow** automatically instead of prompting. Set it globally to opt in for all your clones.
+
+**gitflow.shared.trustHooks**
+When `true`, the executable hook/filter path key `gitflow.path.hooks` is copied from **.gitflow** like any other key. When unset, that key is treated as absent from the effective shared set: it is neither copied in nor left behind, and non-interactive auto-init refuses outright when an untrusted shared hook path is present. This prevents a committed file from silently redirecting hook execution.
+
+**First-run activation**
+
+When a repository is otherwise unconfigured and a valid **.gitflow** is present, the next git-flow command activates it:
+
+- **Interactive terminal** — prompts to initialize from **.gitflow**; declining leaves the repository unconfigured
+- **`gitflow.shared.autoInit=true`** — copies automatically with a one-line notice, refusing if an untrusted hook path is present
+- **Non-interactive, `autoInit` unset** — prints a hint and leaves the repository unconfigured
+
+Activation never runs for `git flow init` itself, in a bare repository or outside a work tree, or when the repository is already configured (local config wins). A **.gitflow** that lacks `gitflow.version` is not offered as initialized, and an unparsable **.gitflow** produces a clear error naming the file. Linked worktrees share the common **.git/config** and inherit the copy without a separate activation.
 
 ## The config Command
 
@@ -162,7 +243,7 @@ Auto-update from parent on finish (default: false)
 Topic branches are short-living branches like feature, release, hotfix.
 
 **--prefix=prefix**
-Branch name prefix (default: *name*/)
+Branch name prefix (default: *name*/). The value is a literal string prepended to the short branch name, used exactly as configured — the trailing slash in the defaults is a naming convention, not a requirement. With `prefix = feature_`, `git flow feature start login` creates the branch `feature_login`.
 
 **--starting-point=branch**
 Branch to create from (defaults to parent)

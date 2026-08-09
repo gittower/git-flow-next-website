@@ -23,12 +23,13 @@ Initialize git-flow configuration in the current Git repository. Sets up the bra
 
 **Usage**
 ```bash
-git-flow init [-f|--force] [--preset=preset] [--custom] [--defaults] [--local|--global|--system|--file=path] [options]
+git-flow init [-f|--force] [--init] [--preset=preset] [--custom] [--defaults] [--shared|--local|--global|--system|--file=path] [options]
 ```
 
 **Options**
 
 - `-f, --force` - Force reconfiguration even if already initialized
+- `--init` - Create a git repository in the current directory when there is none, then initialize git-flow in it. Without this option, running outside a repository fails (exit status 3) when stdin is not an interactive terminal, and prompts `No git repository here. Create one? [y/N]` when it is. Inside an existing repository it is a no-op. The created repository's initial branch is the resolved git-flow trunk, overriding any ambient `init.defaultBranch`
 - `--preset=preset` - Apply a predefined workflow preset (**classic**, **github**, **gitlab**)
 - `--custom` - Enable custom configuration mode
 - `--defaults, -d` - Use default branch naming conventions without prompting for customization
@@ -38,6 +39,7 @@ git-flow init [-f|--force] [--preset=preset] [--custom] [--defaults] [--local|--
 
 Control where git-flow configuration is stored. Only one scope option may be specified at a time. When no scope option is given, git-flow reads from merged config (local > global > system precedence) and writes to local config.
 
+- `--shared` - Author the configuration into a committable **.gitflow** file at the repository top level, then copy the `gitflow.*` keys into local **.git/config**. Committing **.gitflow** lets teammates share one configuration — on a fresh clone, git-flow offers to activate it. Mutually exclusive with the other scope options. Without `--force`, a second run when **.gitflow** already exists fails and leaves the file untouched
 - `--local` - Read and write configuration in the repository's **.git/config** (default for writes)
 - `--global` - Read and write configuration in **~/.gitconfig** (user-wide defaults)
 - `--system` - Read and write configuration in **/etc/gitconfig** (system-wide)
@@ -58,6 +60,8 @@ Control where git-flow configuration is stored. Only one scope option may be spe
 - `--hotfix=prefix, -x prefix` - Override hotfix branch prefix (default: hotfix/)
 - `--support=prefix, -s prefix` - Override support branch prefix (default: support/)
 - `--tag=prefix, -t prefix` - Override version tag prefix (default: none)
+
+A prefix is stored exactly as given; no separator is appended. The trailing slash in the defaults is a naming convention, not a requirement — `feature/`, `feature_`, and `feature-` are all valid and produce the branches `feature/login`, `feature_login`, and `feature-login` respectively. The same applies to prefixes entered at the interactive prompts.
 
 **Examples**
 ```bash
@@ -90,6 +94,13 @@ git flow init --defaults --global
 
 # Initialize with configuration file
 git flow init --defaults --file=/path/to/custom-gitflow.config
+
+# Initialize a shared, committable configuration
+git flow init --defaults --shared
+git add .gitflow && git commit -m "Add shared git-flow configuration"
+
+# Create the repository too, when there isn't one yet
+git flow init --defaults --init
 ```
 
 ---
@@ -109,7 +120,7 @@ git-flow config <command> [args] [options]
 Display current git-flow configuration showing branch hierarchy and settings
 
 **add base** *name* [*parent*] [*options*]
-Add a base branch configuration. Creates the Git branch immediately if it doesn't exist.
+Add a base branch configuration. Creates the Git branch immediately if it doesn't exist. If branch creation fails, the new configuration is removed.
 
 **add topic** *name* *parent* [*options*]
 Add a topic branch type configuration. Saves configuration for use with start command.
@@ -132,6 +143,18 @@ Delete a base branch configuration. Keeps the Git branch but removes git-flow ma
 **delete topic** *name*
 Delete a topic branch type configuration. Does not affect existing branches of this type.
 
+**Shared Configuration Commands**
+
+**sync**
+Copy the shared-managed `gitflow.*` keys from the committable **.gitflow** file into the repository's local **.git/config**, overwriting differing values and removing local keys no longer present in **.gitflow**. Hook/filter path keys (`gitflow.path.hooks`) are copied only when `gitflow.shared.trustHooks` is enabled. When no **.gitflow** file is present, `sync` is a no-op that exits successfully.
+
+**status**
+Compare the shared-managed `gitflow.*` keys in local **.git/config** against the **.gitflow** file, listing any that differ. Exits **0** when in sync (or when no **.gitflow** is present) and **6** when they have drifted. Local-only keys (`gitflow.shared.*`, runtime `gitflow.branch.<branch>.base`) and an intentionally-skipped untrusted hook path are never reported as drift.
+
+**The `--shared` Option**
+
+Available on `add`, `edit`, `rename`, and `delete` (both `base` and `topic`). Edits the committable **.gitflow** file instead of local config, then re-syncs the shared-managed keys into local **.git/config**. Requires an existing **.gitflow** (created by `git flow init --shared`); without one the command fails and suggests `git flow init --shared`, creating no file. Without `--shared`, CRUD verbs write local config only, which `config status` will then report as drift from **.gitflow**.
+
 **Base Branch Options**
 - `--upstream-strategy=strategy` - Merge strategy when merging to parent (**merge**, **rebase**, **squash**)
 - `--downstream-strategy=strategy` - Merge strategy when updating from parent (**merge**, **rebase**)
@@ -143,6 +166,10 @@ Delete a topic branch type configuration. Does not affect existing branches of t
 - `--upstream-strategy=strategy` - Merge strategy when merging to parent (**merge**, **rebase**, **squash**)
 - `--downstream-strategy=strategy` - Merge strategy when updating from parent (**merge**, **rebase**)
 - `--tag[=bool]` - Create tags on finish (default: false)
+
+**Boolean Options on `edit`**
+
+The defaults listed above apply to `add` only. On `edit`, an omitted `--auto-update` or `--tag` preserves the value already stored; only a supplied flag changes it, in either direction — `--tag=false` clears it, `--tag` or `--tag=true` sets it.
 
 **Examples**
 ```bash
@@ -169,6 +196,15 @@ git flow config edit topic feature --upstream-strategy=rebase
 
 # Rename develop branch to integration
 git flow config rename base develop integration
+
+# Check whether local config has drifted from .gitflow
+git flow config status
+
+# Re-apply the shared .gitflow to local config
+git flow config sync
+
+# Edit the shared .gitflow instead of local config
+git flow config edit topic feature --upstream-strategy=rebase --shared
 ```
 
 ---
@@ -285,6 +321,14 @@ Show version information for git-flow-next.
 git-flow version
 ```
 
+**Output**
+
+Prints the version number first, followed by a parenthesized edition marker, so tooling that parses the first whitespace-separated token reads a bare version number:
+
+```
+2.0.0 (git-flow-next)
+```
+
 ---
 
 ### completion
@@ -293,7 +337,7 @@ Generate shell completion script for bash, zsh, fish, or PowerShell.
 
 **Usage**
 ```bash
-git-flow completion [shell]
+git-flow completion <shell>
 ```
 
 **Available Shells**
@@ -301,6 +345,29 @@ git-flow completion [shell]
 - zsh
 - fish
 - powershell
+
+For bash, zsh, and fish the generated scripts complete both the `git-flow` (direct) and `git flow` (git subcommand) invocation forms. PowerShell completion supports `git-flow` only.
+
+**Installation**
+```bash
+# Bash — current session
+source <(git flow completion bash)
+
+# Bash — all sessions (Linux)
+git flow completion bash > /etc/bash_completion.d/git-flow
+
+# Bash — all sessions (macOS with Homebrew)
+git flow completion bash > $(brew --prefix)/etc/bash_completion.d/git-flow
+
+# Zsh — install the completion function, then restart your shell
+git flow completion zsh > "${fpath[1]}/_git-flow"
+
+# Fish — current session
+git flow completion fish | source
+
+# Fish — all sessions
+git flow completion fish > ~/.config/fish/completions/git-flow.fish
+```
 
 ---
 
