@@ -167,6 +167,13 @@ const canonicalURL = Astro.url;
     border-radius: 4px;
     padding: .25rem;
   }
+  /* The rule above targets inline code; inside a <pre> that padding lands on
+     the first and last line only, indenting them. Reset it for code blocks. */
+  pre code {
+    padding: 0;
+    border-radius: 0;
+    color: inherit;
+  }
   .text-center {
     text-align: center;
   }
