@@ -160,4 +160,4 @@ The short version: `git flow feature start` will be able to create your branch i
 
 If you're running multiple AI agents across parallel features, we think you'll like where this is going. You can follow along or weigh in on <a href="https://github.com/gittower/git-flow-next/discussions/45" target="_blank" rel="noopener noreferrer">the GitHub discussion</a>.
 
-We hope you enjoy this release! Happy commiting!
+We hope you enjoy this release! Happy committing!
