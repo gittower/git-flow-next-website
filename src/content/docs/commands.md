@@ -117,7 +117,7 @@ git-flow config <command> [args] [options]
 **Commands**
 
 **list**
-Display current git-flow configuration showing branch hierarchy and settings
+Display current git-flow configuration showing branch hierarchy and settings. Only configured branch types are listed; branches you have started are runtime state and do not appear. Trunk branches, child base branches, and topic branch types are each listed alphabetically by branch type name within their own group, so identical runs on an unchanged repository produce the same output.
 
 **add base** *name* [*parent*] [*options*]
 Add a base branch configuration. Creates the Git branch immediately if it doesn't exist. If branch creation fails, the new configuration is removed.
@@ -224,7 +224,7 @@ git-flow overview [--format=format] [--verbose] [--no-color]
 - `--verbose, -v` - Show detailed information including configuration values and branch metadata
 - `--no-color` - Disable colored output
 
-The overview shows configuration summary, branch structure (base and topic branches), active branches with ahead/behind counts, and workflow health status.
+The overview shows configuration summary, branch structure (base and topic branches), active branches with ahead/behind counts, and workflow health status. Trunk branches, child base branches, and topic branch types are each listed alphabetically by branch type name within their own group, so identical runs on an unchanged repository produce the same output.
 
 **JSON Output**
 
@@ -312,6 +312,117 @@ git flow integrate --abort
 
 ---
 
+### worktree
+
+Manage Git worktrees by branch name, independently of the branch lifecycle. A worktree lets a branch live in its own directory, so an in-progress branch does not have to be stashed away before another one can be started.
+
+Subcommands address worktrees by **full branch name** (e.g. `feature/user-auth`), not by topic type plus short name. Paths are computed from the `gitflow.worktreePath` template unless `--path` overrides them, and the computed path is always absolute.
+
+git-flow records the worktrees it creates by writing a provenance marker in Git config, so `list` can tell them apart from worktrees created with plain `git worktree add`. Provenance is never inferred from a worktree's path, only from the marker. The marker is keyed on the branch and follows it through `git flow rename`, so a renamed branch keeps its worktree's provenance even though the directory keeps its old-name path.
+
+**Usage**
+```bash
+git-flow worktree add <branch> [--path path] [--no-cd] [--quiet]
+git-flow worktree remove <branch> [--force] [--no-cd]
+git-flow worktree list
+git-flow worktree prune
+git-flow worktree path <branch>
+```
+
+**Subcommands**
+
+- `add <branch>` - Create a worktree for an existing branch at the computed path (or at `--path`). Intermediate directories of a nested path such as `feature/user-auth` are created. The branch must exist and must not be checked out in another worktree. Writes the provenance marker for the branch.
+- `remove <branch>` - Remove the worktree that has *branch* checked out. The branch itself is kept. Refuses a worktree with uncommitted or untracked changes unless `--force` is given, and never removes the main worktree. Clears the provenance marker.
+- `list` - List the linked worktrees with their branch and path, one row each. The main worktree is excluded. A worktree git-flow did not create is tagged `(unmanaged)`; a worktree whose HEAD is detached shows `(detached)` in place of a branch name. Prints `No linked worktrees found` when there are none.
+- `prune` - Drop the administrative entries of worktrees whose directories no longer exist, then drop every provenance marker whose branch has no live worktree.
+- `path <branch>` - Print the path the template computes for *branch* and nothing else. Creates nothing and changes nothing.
+
+**Options**
+- `--path path` - Create the worktree at *path* instead of the computed one (`add` only). A relative path resolves against the invocation directory — the directory the command was run from.
+- `--force` - Remove a worktree even when it has uncommitted or untracked changes, discarding them (`remove` only).
+- `--no-cd` - Don't write a navigation destination for the calling shell, even when `GIT_FLOW_CD_FILE` is set (`add` and `remove`).
+- `--quiet, -q` - Don't print the tip naming `git flow shell-init` (`add` only).
+
+**Examples**
+```bash
+# Create a worktree for an existing branch
+git flow worktree add feature/user-auth
+
+# Create it somewhere else
+git flow worktree add feature/user-auth --path ../review-copy
+
+# See where a branch's worktree would go, without creating it
+git flow worktree path feature/user-auth
+
+# List the linked worktrees
+git flow worktree list
+
+# Remove a worktree, keeping the branch
+git flow worktree remove feature/user-auth
+
+# Remove one with uncommitted changes
+git flow worktree remove feature/user-auth --force
+
+# Clean up after deleting a worktree directory by hand
+git flow worktree prune
+```
+
+**Path Template**
+
+`gitflow.worktreePath` controls where worktrees are created. It supports `{{ repo }}` (the main worktree's directory name), `{{ branch }}` (the full branch name), `{{ branchName }}` (the branch without its topic prefix), and `{{ topicType }}` (the topic branch type, empty for a non-topic branch). A leading `~` expands to the home directory; a relative template resolves against the main worktree root. Defaults to `../{{ repo }}-worktrees/{{ branch }}`.
+
+```bash
+git config gitflow.worktreePath '../{{ repo }}-worktrees/{{ branch }}'
+git config gitflow.worktreePath '~/worktrees/{{ topicType }}/{{ branchName }}'
+```
+
+> **Note:** Requires Git 2.17 or newer.
+
+---
+
+### shell-init
+
+Print a shell script that lets git-flow change your shell's working directory when a command navigates to a worktree.
+
+git-flow runs as a subprocess and cannot change the directory of the shell that started it, so a command that would move you — `checkout` to a branch that has a worktree, `worktree add`, `worktree remove`, `<type> start --worktree` — writes its absolute destination to a file instead of changing directories itself. The wrapper this command prints supplies that file for each invocation, changes directory when the command returns a destination, and removes the file afterward.
+
+**Usage**
+```bash
+git-flow shell-init <shell>
+```
+
+**Supported Shells**
+- bash (3.2+)
+- zsh
+- fish (3.0+)
+
+PowerShell and cmd are not supported.
+
+**Installation**
+```bash
+# Bash — current session
+eval "$(git flow shell-init bash)"
+
+# Bash — all sessions
+echo 'eval "$(git flow shell-init bash)"' >> ~/.bashrc
+
+# Zsh — current session
+eval "$(git flow shell-init zsh)"
+
+# Zsh — all sessions
+echo 'eval "$(git flow shell-init zsh)"' >> ~/.zshrc
+
+# Fish — current session
+git flow shell-init fish | source
+
+# Fish — all sessions
+echo 'git flow shell-init fish | source' >> ~/.config/fish/config.fish
+```
+
+The script defines both a `git` and a `git-flow` shell function, so both the `git flow ...` and `git-flow ...` invocation forms navigate. Every other `git` invocation is passed straight through to the real binary. The navigation variable (`GIT_FLOW_CD_FILE`) is set per invocation rather than exported, so it never leaks into other programs or subshells.
+
+---
+
 ### version
 
 Show version information for git-flow-next.
@@ -326,7 +437,7 @@ git-flow version
 Prints the version number first, followed by a parenthesized edition marker, so tooling that parses the first whitespace-separated token reads a bare version number:
 
 ```
-2.0.0 (git-flow-next)
+2.1.0 (git-flow-next)
 ```
 
 ---
@@ -379,11 +490,11 @@ Each topic branch type supports these subcommands:
 
 ### start
 
-Create and checkout a new topic branch of the specified type.
+Create a new topic branch of the specified type and check it out, or create it in its own worktree.
 
 **Usage**
 ```bash
-git-flow <topic> start <name> [base] [options]
+git-flow <topic> start [name] [base] [--worktree|--no-worktree] [--worktree-path path] [--no-cd] [--quiet] [options]
 ```
 
 **Arguments**
@@ -394,6 +505,20 @@ git-flow <topic> start <name> [base] [options]
 **Options**
 - `--fetch` - Fetch from remote before creating branch (**this is the default**). Refreshes remote-tracking refs; the branch is still created from the configured local start point. Skipped silently when no remote is configured, and a fetch failure is a non-fatal warning (start has no sync gate).
 - `--no-fetch` - Don't fetch from remote before creating the branch (opt out of the default)
+- `--worktree, -w` - Create a worktree for the new branch instead of checking the branch out here. The worktree is created at the path the `gitflow.worktreePath` template computes and is recorded as git-flow-created. Overrides `gitflow.branch.<type>.worktree`.
+- `--no-worktree` - Don't create a worktree, even when the branch type defaults to one.
+- `--worktree-path <path>` - Create the worktree at *path* instead of the computed one. Implies `--worktree`. A relative path resolves against the invocation directory.
+- `--no-cd` - Don't write a navigation destination for the calling shell, even when `GIT_FLOW_CD_FILE` is set. The path is still printed for manual use.
+- `--quiet, -q` - Don't print the tip about `git flow shell-init`.
+
+**Worktrees**
+
+With `--worktree` — or a branch type whose `gitflow.branch.<type>.worktree` default is true — the branch is created **without being checked out here**, and a worktree is created for it instead: the current worktree's HEAD is unchanged, because Git allows a branch to be checked out in only one worktree at a time. `--worktree` and `--no-worktree` can both be passed; the one that appears **last** on the command line wins, and `--worktree-path` joins that same ordering since naming a path is itself a request for a worktree. This last-one-wins rule is specific to `start`'s worktree flags — every other `--x`/`--no-x` pair in git-flow prefers the positive flag regardless of order.
+
+To make every new branch of a type start in its own worktree without passing a flag:
+```bash
+git config gitflow.branch.feature.worktree true
+```
 
 **Examples**
 ```bash
@@ -414,6 +539,12 @@ git flow feature start new-api --no-fetch
 
 # Start hotfix from specific tag
 git flow hotfix start 1.1.1 v1.1.0
+
+# Start a feature in its own worktree, leaving the current one where it is
+git flow feature start user-authentication --worktree
+
+# Choose the worktree's location instead of using the computed one
+git flow feature start review-copy --worktree-path ../review-copy
 ```
 
 ---
@@ -465,6 +596,16 @@ git-flow finish [options]  # shorthand for current branch
 - `--no-preserve-merges` - Flatten merges during rebase (default)
 - `--no-ff` - Create merge commit even for fast-forward
 - `--ff` - Allow fast-forward merge when possible (default)
+- `--ff-only` - Require that the merge into the parent branch be a fast-forward. This is a precondition, not a merge strategy: if the parent carries any commit the topic branch does not — whether truly diverged or merely ahead — finish aborts before touching any local branch, tag, or the working tree. Rejected in combination with `--ff`, `--no-ff`, or a squash strategy. Combined with a rebase strategy, it suppresses the rebase step rather than rewriting the topic branch. Constrains the upstream merge only, not automatic child updates. Overrides `gitflow.<type>.finish.ff-only`.
+
+**Worktree Cleanup**
+
+A branch checked out in a linked worktree cannot be deleted while it is checked out there, so finish frees the topic branch's worktree once the merge (and any child-branch updates) complete. A worktree git-flow created is removed; one created by hand (`git worktree add`) is kept, with its HEAD detached from the branch instead — the directory and every file in it, including uncommitted work, stay exactly as they were. Neither flag has a git config equivalent.
+
+- `--keep-worktree` - Keep the branch's worktree instead of removing it, even when git-flow created it. The directory survives on a detached HEAD, and the branch is still deleted.
+- `--force-worktree, -W` - Remove a git-flow-created worktree even if it has uncommitted or untracked changes, discarding them. If the worktree has a merge, rebase, bisect, cherry-pick, or revert in progress, finish is refused regardless of this flag.
+
+A rebase-strategy finish is refused outright when the topic branch has its own separate worktree (merge and squash both work). A child base branch due for auto-update is checked out wherever finish's own merge landed; if it has its own separate worktree, finish refuses outright before the merge starts.
 
 **Remote Fetch Options**
 - `--fetch` - Fetch from remote before finishing (default). Fetches both the base and topic branches. A failure fetching the topic branch against a reachable-but-failing remote is fatal (finish aborts and names the cause, suggesting `--no-fetch` or `--force`); a remote with no ref for the topic (never pushed, or deleted after a remote merge) is benign.
@@ -542,6 +683,15 @@ git flow feature finish my-feature --no-verify
 # Keep branch after finishing
 git flow hotfix finish 1.1.1 --keep
 
+# Finish the branch but keep its worktree, detached
+git flow feature finish my-feature --keep-worktree
+
+# Finish a branch whose git-flow-created worktree has uncommitted changes
+git flow feature finish my-feature --force-worktree
+
+# Refuse to finish unless the parent can be fast-forwarded
+git flow feature finish my-feature --ff-only
+
 # Push updated branches and the tag after finishing a release
 git flow release finish 1.2.0 --push
 
@@ -597,14 +747,17 @@ git flow feature publish my-feature --no-push-option
 
 ### list
 
-List existing topic branches of the specified type, with optional pattern filtering.
+List existing topic branches of the specified type.
 
 **Usage**
 ```bash
-git-flow <topic> list [pattern]
+git-flow <topic> list [--worktrees]
 ```
 
-Patterns support shell-style globbing (`*`, `?`, `[abc]`, `[a-z]`).
+The command takes no other arguments — there is no name-pattern filter.
+
+**Options**
+- `--worktrees` - Append a column reporting each branch's linked worktree. The cell is `-` when the branch has no linked worktree (including one checked out in the main worktree), the worktree's path when it is live and clean, `<path> [n]` when it has *n* changed entries, and `<path> (missing)` when the worktree is registered but no longer present at that path. A worktree git-flow did not create is additionally tagged `(unmanaged)`. Paths are shown relative to the main worktree root.
 
 **Examples**
 ```bash
@@ -614,11 +767,16 @@ git flow feature list
 # List all releases
 git flow release list
 
-# List features matching a pattern
-git flow feature list "user-*"
+# See which features have a worktree, and which have uncommitted work
+git flow feature list --worktrees
+```
 
-# List releases for version 1.x
-git flow release list "1.*"
+```bash
+$ git flow feature list --worktrees
+Feature branches:
+  api-v2     ../review-copy [3] (unmanaged)
+  docs       -
+  user-auth  ../my-project-worktrees/feature/user-auth
 ```
 
 ---
@@ -689,6 +847,13 @@ git-flow delete [name]  # shorthand for current branch
 - `--fetch` - Fetch from remote before deleting. Updates local refs so Git can correctly detect whether the branch was merged remotely (e.g., via a GitHub PR merge), avoiding the need for `--force`. The parent is fast-forwarded only when it is the branch currently checked out (delete auto-checks-out the parent when you delete the branch you are on). A fetch failure against an unreachable remote is a non-fatal note; the topic sync check still runs against existing tracking data and can abort (behind/diverged) unless `--force` is given.
 - `--no-fetch` - Don't fetch from remote before deleting (overrides config). Skips only the fetch; the sync check still runs.
 
+**Worktree Cleanup**
+
+A branch checked out in a linked worktree cannot be deleted while it is checked out there, so delete frees the worktree first. A worktree git-flow created is removed; one created by hand (`git worktree add`) is kept, with its HEAD detached from the branch instead — the directory and every file in it, including uncommitted work, stay exactly as they were. Neither flag has a git config equivalent.
+
+- `--keep-worktree` - Keep the branch's worktree instead of removing it, even when git-flow created it. The directory survives on a detached HEAD, and the branch is still deleted.
+- `--force-worktree, -W` - Remove a git-flow-created worktree even if it has uncommitted or untracked changes, discarding them. If the worktree has a merge, rebase, bisect, cherry-pick, or revert in progress, deletion is refused regardless of this flag.
+
 **Examples**
 ```bash
 # Delete specific feature
@@ -705,6 +870,12 @@ git flow feature delete my-feature --fetch
 
 # Force delete branch with unmerged changes
 git flow feature delete experimental-feature --force
+
+# Delete the branch but keep its worktree, detached
+git flow feature delete my-feature --keep-worktree
+
+# Delete a branch whose git-flow-created worktree has uncommitted changes
+git flow feature delete my-feature --force-worktree
 ```
 
 ---
@@ -731,18 +902,31 @@ git flow rename better-name
 git flow release rename 1.2.0 1.3.0
 ```
 
+A branch's worktree provenance (whether git-flow created it) and its recorded start point are carried to the new name, so a renamed branch keeps everything git-flow knows about it. The worktree **directory** itself keeps its old-name path; use `git flow worktree` if you want the directory to match the new name.
+
 ---
 
 ### checkout
 
-Switch to a topic branch with support for partial name matching.
+Switch to a topic branch with support for partial name matching. When the branch has a worktree, checkout **navigates to it** instead of switching the current worktree's branch.
 
 **Usage**
 ```bash
-git-flow <topic> checkout <name|prefix>
+git-flow <topic> checkout <name|prefix> [--worktree] [--no-cd] [--force] [--quiet] [--showcommands]
 ```
 
 The checkout command supports partial name matching: if no exact match is found, it looks for branches starting with the given prefix. If multiple branches match, it shows options and fails.
+
+**Options**
+- `--worktree, -w` - Create the branch's worktree if it does not exist yet, then navigate to it. The worktree is created at the path the `gitflow.worktreePath` template computes and is recorded as git-flow-created. Without this flag, a branch with no worktree is simply checked out.
+- `--no-cd` - Don't write a navigation destination for the calling shell, even when `GIT_FLOW_CD_FILE` is set. The path is still printed for manual use.
+- `--force` - Remove a plain directory standing in the way of a new worktree. Only meaningful together with `--worktree`. Refused when the target is a file, a registered worktree, or a directory containing a `.git` entry.
+- `--quiet, -q` - Don't print the tip naming `git flow shell-init`.
+- `--showcommands` - Show the underlying git commands as they are executed. Navigating to a worktree runs no git command.
+
+**Worktrees**
+
+A branch that has a worktree lives somewhere else on disk, and Git allows a branch in only one worktree at a time. Rather than failing the way a plain `git checkout` would, checkout **navigates**: it prints the worktree's path and offers it to the calling shell through `GIT_FLOW_CD_FILE` (see `git flow shell-init`), leaving the current worktree's branch untouched. If the branch's worktree **is** the worktree you are already in, checkout does an ordinary `git checkout` instead. Navigating to a worktree never changes its provenance — a hand-made worktree stays `(unmanaged)` no matter how often you check the branch out.
 
 **Examples**
 ```bash
@@ -754,6 +938,9 @@ git flow feature checkout user
 
 # Checkout a release
 git flow release checkout 1.2.0
+
+# Create the branch's worktree if missing, then navigate to it
+git flow feature checkout user-auth --worktree
 ```
 
 ---

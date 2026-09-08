@@ -86,6 +86,25 @@ The hooks directory follows a three-level precedence:
 2. **core.hooksPath** — Git's native hooks path configuration
 3. **.git/hooks** — Default location
 
+**gitflow.worktreePath**
+Template for the path of a branch's worktree, used by `git flow worktree` and by `<type> start`/`checkout` when creating one. Supports `{{ repo }}` (the main worktree's directory name), `{{ branch }}` (the full branch name), `{{ branchName }}` (the branch without its topic prefix), and `{{ topicType }}` (the topic branch type, empty for a non-topic branch), in both the spaced (`{{ branch }}`) and unspaced (`{{branch}}`) form. A leading `~` expands to the home directory. A relative template resolves against the **main worktree root**, not the current worktree, so the answer does not change when a command runs from inside a linked worktree. The computed path is always absolute.
+
+```bash
+# Sibling directory of the repository (the default)
+git config gitflow.worktreePath '../{{ repo }}-worktrees/{{ branch }}'
+
+# One directory per topic type under a home-rooted tree
+git config gitflow.worktreePath '~/worktrees/{{ topicType }}/{{ branchName }}'
+
+# Global default for all repositories
+git config --global gitflow.worktreePath '~/worktrees/{{ repo }}/{{ branch }}'
+```
+
+Defaults to `../{{ repo }}-worktrees/{{ branch }}`.
+
+**gitflow.worktree.*branch*.managed**
+Repository-local state — not a setting to configure by hand — that records whether git-flow created a given branch's worktree. `git flow worktree add` writes it, `git flow worktree remove` clears it, and a rename carries it to the new branch name. `git flow ... list --worktrees` and `git flow worktree list` read it to decide whether a worktree is tagged `(unmanaged)`. It is local-only and excluded from the shared-config set, so it never reaches a committed `.gitflow`.
+
 ## Shared Configuration (.gitflow)
 
 git-flow can store its configuration in a committable **.gitflow** file at the repository top level so a whole team shares one workflow. The file uses the same `git-config` INI format and the same `gitflow.*` keys as **.git/config**:
@@ -126,7 +145,7 @@ git flow config edit topic feature --upstream-strategy=rebase --shared
 
 **Shared-managed key set**
 
-A `gitflow.*` key is *shared-managed* — copied between **.gitflow** and local config — unless it is a `gitflow.shared.*` control key, or the per-branch runtime metadata `gitflow.branch.<branch>.base`. `gitflow.version` and `gitflow.initialized` are shared-managed. Keys outside the `gitflow.*` namespace are never copied, even if present in **.gitflow**. Copying preserves multi-value keys (such as `gitflow.<type>.publish.push-option`) and their order.
+A `gitflow.*` key is *shared-managed* — copied between **.gitflow** and local config — unless it is a `gitflow.shared.*` control key, the per-branch runtime metadata `gitflow.branch.<branch>.base`, or the worktree provenance marker `gitflow.worktree.<branch>.managed`. `gitflow.version` and `gitflow.initialized` are shared-managed. Keys outside the `gitflow.*` namespace are never copied, even if present in **.gitflow**. Copying preserves multi-value keys (such as `gitflow.<type>.publish.push-option`) and their order.
 
 **Control keys**
 
@@ -260,6 +279,9 @@ Create tags on finish (default: false)
 **--force-delete[=bool]**
 Force delete branch even if not fully merged (default: false)
 
+**--worktree[=bool]**
+Create new branches of this type in their own worktree by default (default: false). With this set, `git flow <type> start` creates the branch in its own worktree instead of checking it out, at the path `gitflow.worktreePath` computes. `--worktree` and `--no-worktree` override it per invocation of `start`. Only written for topic branch types — a worktree default has no effect on a base branch.
+
 ## Merge Strategies
 
 **merge** - Standard Git merge creating a merge commit. Preserves branch history and shows clear integration points.
@@ -380,7 +402,15 @@ git config gitflow.feature.publish.push-option "ci.skip"
 # Multiple push options (use --add for additional values)
 git config gitflow.release.publish.push-option "merge_request.create"
 git config --add gitflow.release.publish.push-option "merge_request.target=main"
+
+# Require a fast-forward into the parent on finish (aborts otherwise)
+git config gitflow.release.finish.ff-only true
+
+# Give every new feature its own worktree, without passing --worktree
+git config gitflow.branch.feature.worktree true
 ```
+
+> **Note:** Worktree cleanup on `finish` and `delete` (`--keep-worktree`, `--force-worktree`/`-W`) is CLI-only — there is no git config equivalent, since the right choice depends on the state of that specific worktree.
 
 ## Branch Type Configuration Keys
 
@@ -395,6 +425,7 @@ git config gitflow.branch.<type>.tag <true|false>
 git config gitflow.branch.<type>.tagprefix <prefix>
 git config gitflow.branch.<type>.autoupdate <true|false>
 git config gitflow.branch.<type>.forcedelete <true|false>
+git config gitflow.branch.<type>.worktree <true|false>
 ```
 
 ### Command Overrides
@@ -407,6 +438,7 @@ git config gitflow.<type>.finish.rebase <true|false>
 git config gitflow.<type>.finish.squash <true|false>
 git config gitflow.<type>.finish.preserve-merges <true|false>
 git config gitflow.<type>.finish.no-ff <true|false>
+git config gitflow.<type>.finish.ff-only <true|false>
 git config gitflow.<type>.finish.tag <true|false>
 git config gitflow.<type>.finish.notag <true|false>
 git config gitflow.<type>.finish.sign <true|false>
