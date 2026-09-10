@@ -9,11 +9,13 @@ Here's the ritual. You're deep in a feature when a bug report lands. So you stas
 
 That cost has always been the strongest argument *against* branching workflows like Git Flow. Every branch switch throws away your build cache, your running dev server, and your train of thought.
 
+None of that is new — it has been the price of branching for as long as branches have existed. What's changed is how often you pay it. Point two or three coding agents at the same repository and they are all queuing for a single checkout, each stashing and switching over the others.
+
 Git has had a fix for this since 2015: **worktrees**. One repository, many working directories, each with a different branch checked out. The reason almost nobody uses them is that managing them by hand is tedious — you have to invent a directory naming scheme, remember where everything lives, and clean up after yourself.
 
 **git-flow-next 2.1 does that part for you.**
 
-And the timing matters: switching branches has stopped being something only *you* do. If you have coding agents working on two or three features at once, they're all contending for the same single checkout. Worktrees turn that contention into parallelism — more on that below.
+Worktrees turn that contention into parallelism — there's more on that below.
 
 Let's dive in! 😎
 
