@@ -17,6 +17,11 @@ Git has had a fix for this since 2015: **worktrees**. One repository, many worki
 
 Worktrees turn that contention into parallelism — there's more on that below.
 
+<figure>
+  <iframe src="https://www.youtube.com/embed/vAFvBLcnsG8?rel=0" title="What's new in git-flow-next 2.1: Worktrees" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+  <figcaption>Prefer to watch? Here's the whole release in under four minutes.</figcaption>
+</figure>
+
 Let's dive in! 😎
 
 ## 1. Worktrees: A Directory per Branch
